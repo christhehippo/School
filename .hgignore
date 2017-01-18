@@ -4,4 +4,4 @@ syntax: glob
 *.pyc
 *.o
 *~
-
+*hello
