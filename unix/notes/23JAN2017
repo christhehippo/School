@@ -1,0 +1,20 @@
+Pipes - |
+Allow for multiple commands to be strung together.
+ie: ~cat skeleton cake | wc -c | tee out | wc -c | wc -c >out2
+ 
+
+
+UNIX quotes
+
+" - half quote - allows for expansions
+' - full quote - literal quote, no expansion
+` - comand expansion - tmp=`who | wc -l` 
+
+
+variable tmp
+>tmp=37
+>echo $tmp >37
+
+Combination
+>echo "There are `who | wc -l` users on now." >There are 59 users on now.
+
