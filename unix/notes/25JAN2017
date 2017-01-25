@@ -1,11 +1,19 @@
 UNIX
 25 JAN 2017
+ 
+
+OS used in class - #1 SMP Debian 3.16.36-1+deb8u2 (2016-10-19)
 
 
+uname -v - kernal verison
 whereis ls - location of ls command
 whereis who - location of who
 ln - command to make symbolic links
 
+
+etc(dir) - config files for executables
+lib(dir) - support structure for executables 
+home(dir) - user profiles 
 null - file on the system, send to it to remove
 bin(dir) - binaries, location of executable
 dev(dir) - 
