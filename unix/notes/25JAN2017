@@ -1,0 +1,35 @@
+UNIX
+25 JAN 2017
+
+
+whereis ls - location of ls command
+whereis who - location of who
+ln - command to make symbolic links
+
+null - file on the system, send to it to remove
+bin(dir) - binaries, location of executable
+dev(dir) - 
+ls colors:
+ cyan colored files - points to location
+ green colored files - regular executables
+ red colored files - setUID
+ yellow colored files - character or block devices
+ fuschia colored files - socket file, networking file 
+ brown colored files - pipe, connects two files together
+
+-rwsr-xr-x
+	s - 4 first s is setUID
+	s - 2 second s is setGID
+	t - 1 sticky bit
+
+
+s s t - lowercase means underlying x bit is set 
+
+S S T - capital means there is no executable bit
+
+root - linux default superuser
+
+
+
+ 
+
