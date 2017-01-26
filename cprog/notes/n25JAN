@@ -1,0 +1,7 @@
+logic:
+
+& - bitwise AND
+| - bitwise OR
+^ - biitwise XOR
+! - bitwise NOT
+ 

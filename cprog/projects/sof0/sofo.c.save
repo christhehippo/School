@@ -1,0 +1,12 @@
+^X
+ls
+cd ..
+ls
+^c
+ls
+cd src
+ls
+uptime
+end
+exit
+
