@@ -1,0 +1,40 @@
+30JAN2017
+====SHELLS====
+	   -UNIX-
+	AT&T 	 BSD
+	|	   |
+     Solaris    'xyz'bsd
+
+
+sh -bourne shell 
+bash
+b-a-sh(ell)
+o g
+u a
+r i
+n n
+e
+
+
+===some shells===
+ksh
+zsh
+tcsh
+
+
+
+===environment variables - all shells share these===
+- all uppercase
+- programs use it 
+- posix specifications 
+	- $USER
+	- $HOME
+	- $TERM
+	- $LANG
+	- $PS1 - change the prompt for the shell 
+	- $PS2
+	- PATH
+
+
+chmod 700 'file' - create executable
+

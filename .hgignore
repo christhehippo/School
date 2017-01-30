@@ -5,3 +5,4 @@ syntax: glob
 *.o
 *~
 *hello
+*cscs2650s2017
