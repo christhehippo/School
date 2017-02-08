@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# steps script to demo bash scripting
+#
+
+# Assign first command-line argument to DIRNAME variable
+DIRNAME="${1}"
+
+# Check to see if an argument was given, assign a default if need be
+if [ -z "${DIRNAME}" ]; then]
+	DIRNAME="stuff"
+fi
+
+mkdir -p ${DIRNAME}		# make a directory
+cd ${DIRNAME}			# charge into that directory
+touch file1 file2 file3 file4	# touch new files
+ls -l file[24]			# list even numbered files
+exit

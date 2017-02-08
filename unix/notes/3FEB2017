@@ -1,0 +1,14 @@
+
+
+SEE: ~/src/unix/notes/2FEB2017dem/steps **************************
+
+history command - fills page with history commands entered
+bang command - ![command number] runs command at number in history
+history > [text file] records steps taken
+cut -d ':' -f1,4
+**dont read from and write to the same file [data hazard]**
+
+script - basic commands in a file for the system to execute in order
+#!/bin/bash -x - direct command to bash
+
+

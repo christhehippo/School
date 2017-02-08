@@ -1,3 +1,8 @@
+/*CHRISTIAN CATTELL CPROG*/
+/* dow0 week3 project*/
+
+
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,20 +15,40 @@ int main ()
 
 	fprintf(stderr, "Which year: ");
 	fscanf(stdin, "%hu", &inputYear);
+		/* if the input year doesnt fall within 21st cen, end program*/
 		if (inputYear <= 1999 || inputYear >= 2100)
 		{
-			fprintf(stdout, "Input must be in 21st century\n");
+			fprintf(stderr, "Input must be in 21st century\n");
 			exit(1);
 		}
+	/* variables used in the steps to calculate the dayValue */
 
 	unsigned short nYear = (inputYear % 2000);
+	/* 25% of the last two digits of the input year */ 
 	unsigned short qYear = ((nYear * .1) + (nYear * .1) + (nYear * .05));
-	unsigned short nqYear = (nYear + qYear);
+	/* adds the 25% to the original value of last two characters */
+	unsigned short nqYear;
+	/* determines if the year is a leap year */
+	if ((nYear % 4) == 0 && (inputYear != 2000)/* cheating to work around year 2000 messing up calculation */)
+	{
+		nqYear = (nYear + (qYear - 1)); /* leap year value */
+	}
+	else
+	{
+		nqYear = (nYear + qYear); /* else not leap year value */
+	}
 	unsigned short multiple = (nqYear / 7);
-
-	unsigned short dayValue = ((nqYear) - (multiple * 7));
+	/* trims off the remainder to get the highest 7 multiple */
+	unsigned short multipleL = (multiple * 7);
+	/* this value is used to determine the day of Jan 1 */
+	unsigned short dayValue = ((nqYear) - (multipleL));
+	/* switch case to print the day that corresponds to dayValue 0-7 */
+	fprintf(stdout,"January 1st, %hu falls on: ", inputYear);
 	switch (dayValue)
 	{
+		case 0:
+			fprintf(stdout, "Saturday\n");
+			break;
 		case 1:
 			fprintf(stdout, "Monday\n");
 			break;
@@ -42,24 +67,21 @@ int main ()
 		case 6:
 			fprintf(stdout, "Saturday\n");
 			break;
-		default:
+		case 7:
 			fprintf(stdout, "Sunday\n");
 			break;
 	}
-/* figure out how to account for leap years */
-
-
-
-
+/* used to test program while designing it:
 
 	fprintf(stdout, "%hu\n", inputYear);
 	fprintf(stdout, "%hu\n", nYear);
 	fprintf(stdout, "%hu\n", qYear);
 	fprintf(stdout, "%hu\n", nqYear);
 	fprintf(stdout, "%hu\n", multiple);
+	fprintf(stdout, "%hu\n", multipleL);
 	fprintf(stdout, "%hu\n", dayValue);
+*/
 
-
-
+	/*end*/
 	return (0);
 }

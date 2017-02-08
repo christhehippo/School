@@ -1,0 +1,10 @@
+29  
+14  --------  Just run the following to perform that action:
+5   form of command-lines. Please be sure to type them exactly as written!
+6  
+10  
+3  
+26  
+15  
+1   -------------------------------------------------------------------------
+25    $ cat results | mail -s "[UNIX: puzzlebox]" wedge ${USER}@offbyone.lan
