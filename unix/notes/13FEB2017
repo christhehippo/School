@@ -1,0 +1,46 @@
+====13FEB2017====
+
+octal file permissions
+0|730
+-rwx-wx---T
+   |  |	  |
+   |  |    sticky bit value 1
+   |  |
+   |  set GUD(s,S)
+   |
+   set UID(s,S)
+
+
+ctrl-z suspends process in UNIX | same signal as kill command 19
+
+
+*  vi find replace;
+%s/[pattern]/[replace]/g  *
+
+globally seach by regular expression > grep
+ in order of performance speed
+> fgrep --- fast grep, turns off extra checking
+> grep --- useful search tool
+> egrep --- extended grep
+
+grep:
+cat /etc/motd | grep 'the'
+
+common options 
+>grep -i --- ignores case sensitivity 
+>grep -o --- displays only the matches, not lines
+>grep -v --- displays all line that do not match the seach
+>grep -n --- numbers the lines
+>grep -A/B --- displays lines before after matching line
+
+
+kill command
+>ps
+>get PID
+>kill -[] [PID]
+
+kill -l - display the options for kill command, 1-64
+
+segmentation fault - accessed memory that you dont have access to
+
+

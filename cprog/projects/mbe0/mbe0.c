@@ -14,15 +14,12 @@ int main ()
 	unsigned char sum10;
 	unsigned char carry1;
 	unsigned char sum1;
-	 
-	
-
 
 	fprintf(stderr, "Enter value: ");
 	fscanf(stdin, "%hu", &userInput);
-
-
-
+    
+	unsigned char d1 = (userInput/10);
+	unsigned char d2 = (userInput%(d1*10));
 
 
 
@@ -40,6 +37,11 @@ int main ()
 	fprintf(stderr, "sum10: %7hhu\n", sum10);
 	fprintf(stderr, "carry1: %6hhu\n", carry1);
 	fprintf(stderr, "sum1: %8hhu\n", sum1);
+	fprintf(stderr, "d1: %10hu\n", d1);
+	fprintf(stderr, "d2: %10hu\n", d2);
+
+
+
 
 	return (0);
 }
