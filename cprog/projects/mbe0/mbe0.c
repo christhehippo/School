@@ -18,27 +18,58 @@ int main ()
 	fprintf(stderr, "Enter value: ");
 	fscanf(stdin, "%hu", &userInput);
     
-	unsigned char d1 = (userInput/10);
-	unsigned char d2 = (userInput%(d1*10));
+	if (userInput < 100)
+	{
+	
+		unsigned char d2 = (userInput%10);
+		unsigned char d1 = ((userInput-d2) / 10);
+
+
+
+		fprintf(stderr, "d1: %hhu\n", d1);
+		fprintf(stderr, "d2: %hhu\n", d2);
+		
+	}
+	else 
+	{
+	
 
 
 
 
 
+		//fprintf(stderr, "d1: %hhu\n", d1);
+		//fprintf(stderr, "d2: %hhu\n", d2);
+		//fprintf(stderr, "d3: %hhu\n", d3);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//unsigned char d1 = (userInput/10);
+	//unsigned char d2 = (userInput%(d1*10));
 
 	//test tool
-	fprintf(stderr, "userInput: %3hu\n", userInput);
-	fprintf(stderr, "sum10000: %4hhu\n", sum10000);
-	fprintf(stderr, "carry1000: %3hhu\n", carry1000);
-	fprintf(stderr, "sum1000: %5hhu\n", sum1000);
-	fprintf(stderr, "carry100: %4hhu\n", carry100);
-	fprintf(stderr, "sum100: %6hhu\n", sum100);
-	fprintf(stderr, "carry10: %5hhu\n", carry10);
-	fprintf(stderr, "sum10: %7hhu\n", sum10);
-	fprintf(stderr, "carry1: %6hhu\n", carry1);
-	fprintf(stderr, "sum1: %8hhu\n", sum1);
-	fprintf(stderr, "d1: %10hu\n", d1);
-	fprintf(stderr, "d2: %10hu\n", d2);
+	/*fprintf(stderr, "userInput: %4hu\n", userInput);
+	fprintf(stderr, "sum10000: %5hhu\n", sum10000);
+	fprintf(stderr, "carry1000: %4hhu\n", carry1000);
+	fprintf(stderr, "sum1000: %6hhu\n", sum1000);
+	fprintf(stderr, "carry100: %5hhu\n", carry100);
+	fprintf(stderr, "sum100: %7hhu\n", sum100);
+	fprintf(stderr, "carry10: %6hhu\n", carry10);
+	fprintf(stderr, "sum10: %8hhu\n", sum10);
+	fprintf(stderr, "carry1: %7hhu\n", carry1);
+	fprintf(stderr, "sum1: %9hhu\n", sum1);
+	*/
 
 
 
