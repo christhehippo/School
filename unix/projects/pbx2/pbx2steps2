@@ -1,0 +1,26 @@
+#:bin/bash
+#
+#
+#
+
+cd ~
+cd ..
+cd ..
+cd var
+cd public
+cd unix
+cd pbx2
+cp MANIFEST ~/src/unix/projects/pbx2
+cd ccattell
+cp README ~/src/unix/projects/pbx2
+cp pbx2.wav ~/src/unix/projects/pbx2
+cd ~
+cd src
+cd unix
+cd projects
+cd pbx2
+uudecode pbx2.wav
+unzip pbx2.xml
+ar -xvf pbx2.tar
+cat datafile | cut -c 1-28 > half1
+
