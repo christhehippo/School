@@ -93,6 +93,19 @@ uudecode pbx2.wav
 unzip pbx2.xml
 ar -xvf pbx2.tar
 cat datafile | cut -c 1-28 > half1
-cat half1 | rev > half1rev
-cat half1rev | tail -13 > q2
 cat datafile | cut -c 30-60 > half2
+cat half2 | tail -13 > qW
+cat half2 | head -13 > qX
+cat half1 | tail -13 > qY
+cat half1 | head -13 > qZ
+cat qW | rev | sort -n > q3
+cat qX | tr -d X > rada
+tac rada > q1
+tac qY | rev > q4
+tac qZ > q2
+paste -dX q1 q2 > top
+paste -dX q3 q4 > bot
+cat top bot | tr -d X > test
+
+
+
