@@ -5,7 +5,7 @@
 int main (int argc, char *argv[])
 {
 	//start timer
-	clock_t start = clock();
+	clock_t start = clock(), diff;
 
 	int x = 0;
 	//main loop, runs for each entered value
@@ -26,10 +26,11 @@ int main (int argc, char *argv[])
 		}
 	
 	}
-	
-	clock_t end = clock();
-	long double timeTaken = ((end - start) / CLOCKS_PER_SEC);
-	fprintf(stdout, "Time taken: %Lf seconds\n", timeTaken );
+
+	//end timer	
+	diff = clock() - start;
+	int msec = diff * 1000 / CLOCKS_PER_SEC;
+	fprintf(stdout, "Time taken: %d seconds %d milliseconds\n", msec/1000, msec%1000);
 
 	return (0);
 }
