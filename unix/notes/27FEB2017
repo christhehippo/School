@@ -1,0 +1,15 @@
+##########27 FEB 2017###########
+#############NOTES##############
+
+LOOPS:
+-------
+- for : for each item, do a thing 
+	- numeric based **SEE 0227script2.sh**
+		- for(([starting value]; [condition]; [step value]))
+	- list based **SEE 0227script3.sh**
+		- for [variable] in 
+
+- while : while some condition is true, do a thing **SEE 0227script.sh**
+
+
+
