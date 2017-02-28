@@ -22,32 +22,31 @@ int main (int argc, char **argv)
 	//start timer
 	gettimeofday(&time_start, 0);
 	//include 2 to comp for removing even numbers
-	fprintf(stdout, "2 3 ");
+	//fprintf(stdout, "2 ");
 
 	//main loop, runs for all numbers in range 2 - max(argv[1])	
-	for (x = 3; x <= max; x = (x + 2))
+	for (x = 2; x <= max; x++)
 	{
 		//show determines if a number will be printed
 		show = 0;	
 		pCheck = 0;
 		//next loop, takes value x and checks to see if it is prime
-		for (y = 3; y < x; y = (y + 2))
+		for (y = 2; y < x; y++)
 		{	
 			//pCheck should execute x-2 times if prime, break at first sign of composite 
 			pCheck = (x % y);
 			//if a number is not prime, break	
-			if (pCheck != 0) 
+			if (pCheck != 0)
 			{
 				++show;	
 			}
 			else
 			{
-				show = 0;
 				break;
 			}
 		}
 		//if a number passed the prime test, show will be equal to x-2
-		if (show > 0 ) 
+		if (show == (x - 2)) 
 		{
 			fprintf(stdout, "%d ", x);
 		}

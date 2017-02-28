@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <math.h>
+
 
 int main (int argc, char **argv)
 {
 	//variables
-	int x, y, pCheck, show;
+	int x, y, pCheck, show, square;
 	//convert string input to int
 	int max =  atoi(argv[1]);	
-	int z[max];
-
 	//timer stuff
 	struct timeval time_start; //starting time
 	struct timeval time_end;   //ending time
@@ -23,27 +23,49 @@ int main (int argc, char **argv)
 	
 	//start timer
 	gettimeofday(&time_start, 0);
+	//include 2 to comp for removing even numbers
+	fprintf(stdout, "2 3 ");
 
 	//main loop, runs for all numbers in range 2 - max(argv[1])	
-	for (x = 2; x <= max; x++)
+	for (x = 3; x <= max; x = (x + 2))
 	{
+		//show determines if a number will be printed
 		show = 0;	
+		pCheck = 0;
+		square = sqrt(x);
 		//next loop, takes value x and checks to see if it is prime
-		for (y = 2; y < x; y++)
-		{
+		for (y = 3; y < x; y = (y + 2))
+		{	
+			if (y > square)
+			{
+				if (x == 5)
+				{
+					++show;
+					break;
+				}
+				if (x == 7)
+				{
+					++show;
+					break;
+				}
+				break;
+			}
+			//pCheck should execute x-2 times if prime, break at first sign of composite 
 			pCheck = (x % y);
 			//if a number is not prime, break	
-			if (pCheck == 0)
+			
+			if (pCheck != 0) 
 			{
-				break;	
+				++show;	
 			}
 			else
 			{
-				++show;
+				show = 0;
+				break;
 			}
 		}
 		//if a number passed the prime test, show will be equal to x-2
-		if (show == (x - 2)) 
+		if (show > 0 ) 
 		{
 			fprintf(stdout, "%d ", x);
 		}
