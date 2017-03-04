@@ -6,6 +6,12 @@
 
 int main (int argc, char **argv)
 {
+	//verify correct number of args
+	if (argc < 2)
+	{
+		fprintf(stderr, "Not enough arguments!\n");
+		exit(1);
+	}
 	//variables
 	int x, y, pCheck, show, square;
 	//convert string input to int
@@ -14,13 +20,7 @@ int main (int argc, char **argv)
 	struct timeval time_start; //starting time
 	struct timeval time_end;   //ending time
 
-	//verify correct number of args
-	if (argc < 2)
-	{
-		fprintf(stderr, "Not enough arguments!\n");
-		exit(1);
-	}
-	
+
 	//start timer
 	gettimeofday(&time_start, 0);
 	//include 2 to comp for removing even numbers
