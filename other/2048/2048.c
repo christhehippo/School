@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+int stats (int score, int moves);
+
 int main ()
 {
 	time_t t;
@@ -15,16 +17,28 @@ int main ()
 	for (n = 0; n <= 4; n++)
 	{
 		if (n == 0)
-		{	
-			fprintf(stdout, " ~~~~~~~~~~~~~~~~       ~~~~~~~~~~~\n");
-			fprintf(stdout, " Score: %9.9d       Moves: %4.4d  \n", score, moves);  
-			fprintf(stdout, " ~~~~~~~~~~~~~~~~       ~~~~~~~~~~~\n");
-			fprintf(stdout, " _______ _______ _______ _______ _______\n");
+			{	
+				fprintf(stdout, " _______ _______ _______ _______ _______\n");
+			}	
+			
+			fprintf(stdout, "|       |       |       |       |       |\n");
+			fprintf(stdout, "|       |       |       |       |       |\n");
+			fprintf(stdout, "|_______|_______|_______|_______|_______|\n");
 		}
-		fprintf(stdout, "|       |       |       |       |       |\n");
-		fprintf(stdout, "|       |       |       |       |       |\n");
-		fprintf(stdout, "|_______|_______|_______|_______|_______|\n");
-	}
+	
 	return(0);
+
+}
+
+stats (score, moves)
+{
+	
+
+
+
+
+
+
+	return (0);
 
 }
