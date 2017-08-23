@@ -16,14 +16,14 @@ int main ()
 	// Variables
 	unsigned char 		uchr = 0;
 	signed char   		schr = 0;
-	unsigned short int  usint = 0;
-	signed short int    ssint = 0;
-	unsigned int        uint = 0;
-	signed int          sint = 0;
-	unsigned long int   ulint = 0;
-	signed long int     slint = 0;
-	unsigned long long  ullint = 0;
-	signed long long    sllint = 0;
+	//unsigned short int  usint = 0;
+	//signed short int    ssint = 0;
+	//unsigned int        uint = 0;
+	//signed int          sint = 0;
+	//unsigned long int   ulint = 0;
+	//signed long int     slint = 0;
+	//unsigned long long  ullint = 0;
+	//signed long long    sllint = 0;
 
 	// Code for unsigned char
 	fprintf(stdout, "TYPE: %13s, " , "unsigned char");
@@ -36,8 +36,10 @@ int main ()
 	// Code for signed char
 	fprintf(stdout, "TYPE: %11s, ", "  signed char");
 	fprintf(stdout, "bytes: %lu, ", sizeof(schr));
-	fprintf(stdout, "low: %hhu, " , (schr & 0x00));
-	fprintf(stdout, "high: %hhu, ", (schr | ));
+	fprintf(stdout, "low: %hhd, ", (schr | 0x80)); 
+	fprintf(stdout, "high: %hhd, ", (schr | 0x7F));
+	schr = schr - 1;
+	fprintf(stdout,"qty: %hhd\n",    (schr+1));
 	// Code for unsigned short int
 
 	// Code for signed short int

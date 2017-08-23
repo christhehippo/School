@@ -5,9 +5,11 @@
 */
 #include <stdio.h>
 
-int main()								// ever program needs a start, main() is ours
+// every program needs a start, main() is ours
+int main()
+
 {
-	fprintf(stdout, "Hello, World!\n");  // display a message to STDOUT
-	return (0);							// return a sccess status to OS
+	fprintf(stdout, "Hello, World!\n"); // display a message to STDOUT
+	return (0);							// return a success status to OS
 }
 

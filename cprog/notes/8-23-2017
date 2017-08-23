@@ -1,0 +1,52 @@
+---Different versions of C - talk about in journal
+
+DATA TYPES:
+--------------------
+
+Whole Numbers
+-integers
+	-char
+	-short int
+	-int
+	-long int
+	-long long int
+
+Decimal Values
+-floating point
+
+
+ASCII
+-characters "strings"
+
+
+Memory Addresses
+-pointers
+
+
+
+__________________
+#include <stdio.h> = preprocessor directive
+
+__________________
+int main() = function definition 
+int = return value
+() = parameters
+
+-----------------
+scopes:
+-global
+-file
+-function
+-block
+
+----------------
+Basic math operators
+= set equality
++ addition
+- subtraction
+* multiplication
+/ division
+% remainder
+
+
+
