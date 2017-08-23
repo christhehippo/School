@@ -48,5 +48,19 @@ Basic math operators
 / division
 % remainder
 
+----------------
+Logical operators
+&  bitwise AND
+|  bitwise OR
+^  bitwise XOR
+>> bitwise right shift
+<< bitwise left shift
+! bitwise NOT
 
-
+-----------
+%d - signed int
+%u - unsigned int
+%ld - long signed int
+%lld - long long signed int
+%hu - signed short int
+%hhd - signed char
