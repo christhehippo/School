@@ -1,0 +1,6 @@
+#adm0steps 
+cd ~
+cd ../../var/public/fall2017/UNIX/adm0/ccattell
+cp adm0a.zip ~/src/unix/projects/adm0/adm0a.zip
+
+
