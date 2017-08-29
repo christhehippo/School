@@ -1,6 +1,34 @@
-#adm0steps 
+####Christian Cattell unix amd0 project######################################
+####adm0steps################################################################ 
+#############################################################################
+
 cd ~
 cd ../../var/public/fall2017/UNIX/adm0/ccattell
 cp adm0a.zip ~/src/unix/projects/adm0/adm0a.zip
+cp adm0b.tar.gz ~/src/unix/projects/adm0/adm0b.tar.gz
+cp adm0c.tar.bz2 ~/src/unix/projects/adm0/adm0c.tar.bz2
+cp adm0d.tar.xz ~/src/unix/projects/adm0/adm0d.tar.xz
+cd ~/src/unix/projects/adm0
+unzip adm0a.zip
+tar -xvf adm0b.tar.gz
+tar -xvf adm0c.tar.bz2
+tar -xvf admod.tar.xz
+unzip 2.zip
+uudecode out32
+uudecode out62
+rev 6 > 6new
+uudecode out7
+rev out5 > 5
+tac out8 > 8
+mv 1 a
+mv 2 b
+mv 3 c1
+tac c1 > c
+mv 4 d
+mv 5 e
+mv 6new f
+mv 7 g
+mv 8 h
+tar -czvf adm0e.tar.gz a b c d e f g h
 
 
