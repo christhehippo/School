@@ -1,0 +1,9 @@
+12  -------------------------------------------------------------------------
+20  
+24  
+19        current directory as you run the command.
+18  NOTE: This assumes your "results" and "pbx0steps" files are in the
+1   -------------------------------------------------------------------------
+22  Action 2: Email this file's contents to your instructor as well as
+25    $ cat results | mail -s "[UNIX: puzzlebox]" wedge ${USER}@offbyone.lan
+2   Congratulations! You unravelled the puzzle box!

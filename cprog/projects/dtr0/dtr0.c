@@ -39,7 +39,7 @@ int main ()
 	fprintf(stdout, "low: %hhd, ", (schr | 0x80)); 
 	fprintf(stdout, "high: %hhd, ", (schr | 0x7F));
 	schr = schr - 1;
-	fprintf(stdout,"qty: %hhd\n",    (schr));
+	fprintf(stdout,"qty: %hd\n",    (schr-1));
 	// Code for unsigned short int
 
 	// Code for signed short int
