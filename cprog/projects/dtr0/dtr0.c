@@ -21,16 +21,19 @@ int main ()
 	unsigned int        uint = 0;
 	signed int          sint = 0;
 	unsigned long int   ulint = 0;
-	//signed long int     slint = 0;
-	//unsigned long long  ullint = 0;
-	//signed long long    sllint = 0;
+	signed long int     slint = 0;
+	unsigned long long  ullint = 0;
+	signed long long    sllint = 0;
 
 	// Code for unsigned char
 	fprintf(stdout, "TYPE: %13s, ", "unsigned char");
 	fprintf(stdout, "bytes: %lu, ", sizeof(uchr));
+	//line below sets all bits to 0
 	fprintf(stdout, "low: %hhu, ",  (uchr & 0x00));
+	//line below sets all bits to 1
 	fprintf(stdout, "high: %hhu, ", (uchr | 0xFF));
 	uchr = uchr - 1;
+	//changing from hhu to hu, as hhu can display only to 255 (?)
 	fprintf(stdout, "qty: %hu\n",   (uchr+1));
 	
 	// Code for signed char
@@ -59,7 +62,8 @@ int main ()
 	fprintf(stdout, "TYPE: %12s, ", "unsigned int");
 	fprintf(stdout, "bytes: %lu, ", sizeof(uint));
 	fprintf(stdout, "low: %u, ", (uint & 0x00000000));
-	//something got odd around here and Im not 100% sure how I fixed it
+	//Something got odd around here and Im not 100% sure why but
+	//I fixed it as far as I can tell.
 	fprintf(stdout, "high: %u, ", (uint | 0xFFFFFFFE));
 	uint = uint -1;
 	fprintf(stdout, "qty: %lu\n", (uint));
@@ -75,13 +79,31 @@ int main ()
 	fprintf(stdout, "TYPE: %17s, ", "unsigned long int");
 	fprintf(stdout, "bytes: %lu, ", sizeof(ulint));
 	fprintf(stdout, "low: %lu, ", (ulint & 0x00));
-	fprintf(stdout, "high: %lu, " (ulint | 0x	
+	fprintf(stdout, "high: %lu, ", (ulint | 0xFFFFFFFFFFFFFFFE));	
+	ulint = ulint -1;
+	fprintf(stdout, "qty: %llu\n", (ulint));
 
 	// Code for signed long int
-	//fprintf(stdout, "TYPE
+	fprintf(stdout, "TYPE: %17s, ", "signed long int");
+	fprintf(stdout, "bytes: %lu, ", sizeof(slint));
+	fprintf(stdout, "low: %ld, ", (slint | 0x8000000000000000));
+	fprintf(stdout, "high: %ld, ", (slint | 0x7FFFFFFFFFFFFFFF));
+	fprintf(stdout, "qty: %llu\n", (ulint));
+	
 	// Code for unsigned long long int
+	fprintf(stdout, "TYPE: %22s, ", "unsigned long long int");
+	fprintf(stdout, "bytes: %lu, ", sizeof(ullint));
+	fprintf(stdout, "low: %llu, ", (ullint & 0x00));
+	fprintf(stdout, "high: %llu, ", (ullint | 0xFFFFFFFFFFFFFFFE));
+	ullint = ullint -1;
+	fprintf(stdout, "qty: %llu\n", (ullint));
 
 	// Code for signed long long int
+	fprintf(stdout, "TYPE: %22s, ", "signed long long int");
+	fprintf(stdout, "bytes: %lu, ", sizeof(sllint));
+	fprintf(stdout, "low: %lld, ", (sllint | 0x8000000000000000));
+	fprintf(stdout, "high: %lld, ", (sllint | 0x7FFFFFFFFFFFFFFF));
+	fprintf(stdout, "qty: %llu\n", (ullint));
 
 	return(0);
 }
