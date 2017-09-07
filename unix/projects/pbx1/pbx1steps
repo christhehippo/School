@@ -1,0 +1,9 @@
+#####pbx1steps by Christian Cattell for CSCS1730#####
+
+cd /var/public/unix/ccattell
+cp README ~/src/unix/projects/pbx1/README
+cp pbx1.wac ~/src/unix/projects/pbx1/pbx1.wav
+uudecode pbx1.wav
+unzip pbx1.xml
+ar x pbx1.tar
+
