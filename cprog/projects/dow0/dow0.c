@@ -70,20 +70,10 @@ int main ()
 	{									 // which otherwise wouldnt work
 		fprintf(stdout, "Saturday\n");
 	}
-	if (dayValue == 0 || dayValue >= 7)
-	{
+	if (dayValue == 0 || dayValue >= 7) // unsure if dayValue ever goes above
+	{									// 7 but being safe
 		fprintf(stdout, "Sunday\n");
 	}
-
-
-	
-
-
-
-
-
-
-
 
 	return (0);
 }

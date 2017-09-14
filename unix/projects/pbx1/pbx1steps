@@ -1,4 +1,5 @@
 #####pbx1steps by Christian Cattell for CSCS1730#####
+#!/bin/bash
 
 cd /var/public/unix/ccattell
 cp README ~/src/unix/projects/pbx1/README
@@ -6,4 +7,22 @@ cp pbx1.wac ~/src/unix/projects/pbx1/pbx1.wav
 uudecode pbx1.wav
 unzip pbx1.xml
 ar x pbx1.tar
+head -13 datafile > tophalf
+cat datafile | tail -13 > bottomhalf
+cut -c-29 tophalf > c1
+cut -c-28 bottomhalf > c2
+cut -c 31-56 tophalf > c3
+cut -c 30-59 bottomhalf > c4
+rev c1 > c1rev
+tac c1rev > q2
+rev c2 > c2rev
+tac c2rev > q4
+rev c3 > c3rev
+tac c3rev > q1
+rev c4 > c4rev
+tac c4rev > q3
+cat q[2-3] > left
+cat q[14] > right
+paste -d"\0" left right > pbx1.results
+
 
