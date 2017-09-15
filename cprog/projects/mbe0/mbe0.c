@@ -101,6 +101,57 @@ int main ()
 	}		
 	else
 	{
+		sum1 = ((input % 100) % 10);
+		carry1 = 0;
+		sum10 = sum1 + ((input / 10) % 10);
+		//check for carry 10s
+		if (sum10 >= 10)
+		{
+			carry10 = 1;
+			sum10 = sum10 - 10;
+		}
+		else
+		{
+			carry10 = 0;
+		}
+		
+		sum100 = (input / 100) + ((input % 100) / 10) + carry10;
+		//check for carry 100s
+		if (sum100 >= 10)
+		{
+			carry100 = 1;
+			sum100 = sum100 - 10;
+
+		}	
+		else
+		{
+			carry100 = 0;
+		}
+		
+		sum1000 = carry100 + (input / 100);
+		//check for carry 1000s
+		if (sum1000 >= 10)
+		{
+			carry1000 = 1;
+			sum1000 = sum1000 - 10;
+		}
+		else
+		{
+			carry1000 = 0;
+		}
+
+		sum10000 = carry1000;
+
+		//no carries output
+		if ((carry10 = 0) && (carry100 = 0) && (carry1000 = 0))
+		{
+			fprintf(stderr,"hi\n");
+		}
+		fprintf(stderr, "sum1-10000: %d %d %d %d %d. carry10-1000: %d %d %d.\n", sum1, sum10, sum100, sum1000, sum10000, carry10, 
+		carry100, carry1000);
+
+
+
 
 	}
 
