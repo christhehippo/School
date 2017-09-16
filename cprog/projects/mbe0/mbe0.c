@@ -37,12 +37,12 @@ int main ()
 			fprintf(stderr, "%15d   ", sum100);
 			fprintf(stderr, "(%d+%d)", sum100, sum1);
 			fprintf(stderr, "%4d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"%15d", sum100);
-			fprintf(stderr,"%6d", sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stdout,"%d%d%d\n", sum100, sum10, sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%15d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d\n", sum100, sum10, sum1);
 			return (0);
 		}
 //		fprintf(stderr, "sum10: %d\n", sum10);
@@ -57,19 +57,29 @@ int main ()
 			fprintf(stderr, "%15d   ", (input / 10));
 			fprintf(stderr, "(%d+%d)", (input / 10), sum1);
 			fprintf(stderr, "%4d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"%15d", (input / 10));
-			fprintf(stderr,"%5d%d", carry100, sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"            (%d+%d)", (input / 10), carry10);
-			fprintf(stderr,"%4d", sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"%14d%d", carry100 ,sum100);
-			fprintf(stderr,"%6d", sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%15d", (input / 10));
+			fprintf(stderr, "%5d%d", carry100, sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "            (%d+%d)", (input / 10), carry10);
+			fprintf(stderr, "%4d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%14d%d", carry100 ,sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "      (%d+%d)", sum1000 ,carry100);
+			fprintf(stderr, "%4d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", carry100);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
 			fprintf(stdout,"%d%d%d%d\n", carry100,sum100, sum10, sum1);
 			return (0);
 
@@ -81,33 +91,36 @@ int main ()
 			fprintf(stderr, "%15d   ", (input / 10));
 			fprintf(stderr, "(%d+%d)", (input / 10), sum1);
 			fprintf(stderr, "%4d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"%15d", (input / 10));
-			fprintf(stderr,"%5d%d", carry10, sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"            (%d+%d)", (input / 10), carry10);
-			fprintf(stderr,"%4d",sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stderr,"%15d", sum100);
-			fprintf(stderr,"%6d", sum10);
-			fprintf(stderr,"%6d\n", sum1);
-			fprintf(stderr,"         = ");
-			fprintf(stdout,"%d%d%d\n", sum100, sum10, sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%15d", (input / 10));
+			fprintf(stderr, "%5d%d", carry10, sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "            (%d+%d)", (input / 10), carry10);
+			fprintf(stderr, "%4d",sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%15d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d\n", sum100, sum10, sum1);
 			return (0);
 
 		}
 	}		
 	else
 	{
+		//first piece of output
+		fprintf(stderr, "%3hu x 11 = ", input);
+		
 		sum1 = ((input % 100) % 10);
 		carry1 = 0;
 		sum10 = sum1 + ((input / 10) % 10);
 		//check for carry 10s
 		if (sum10 >= 10)
 		{
-			carry10 = 1;
+			carry10 = sum10 / 10;
 			sum10 = sum10 - 10;
 		}
 		else
@@ -120,8 +133,7 @@ int main ()
 		if (sum100 >= 10)
 		{
 			carry100 = 1;
-			sum100 = sum100 - 10;
-
+			sum100 = sum100 - 10;	
 		}	
 		else
 		{
@@ -129,6 +141,7 @@ int main ()
 		}
 		
 		sum1000 = carry100 + (input / 100);
+
 		//check for carry 1000s
 		if (sum1000 >= 10)
 		{
@@ -141,14 +154,165 @@ int main ()
 		}
 
 		sum10000 = carry1000;
-
+		
 		//no carries output
-		if ((carry10 = 0) && (carry100 = 0) && (carry1000 = 0))
+		if ((carry10 == 0) && (carry100 == 0) && (carry1000 == 0))
 		{
-			fprintf(stderr,"hi\n");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "   (%d+%d)", sum1000, (sum100 - sum1000));
+			fprintf(stderr, " (%d+%d)", (sum100 - sum1000), sum1);
+			fprintf(stderr, "%4d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
 		}
-		fprintf(stderr, "sum1-10000: %d %d %d %d %d. carry10-1000: %d %d %d.\n", sum1, sum10, sum100, sum1000, sum10000, carry10, 
-		carry100, carry1000);
+		
+		if ((carry10 == 1) && (carry100 == 0) && (carry1000 == 0))
+		{
+//			fprintf(stderr, "test\n");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "   (%d+%d)", sum1000, (sum100 - (carry10 + sum1000)));
+			fprintf(stderr, " (%d+%d)", (sum100 - (sum1000 + carry10)), sum1);
+			fprintf(stderr, "%4d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "%6d", (sum100 - carry10));
+			fprintf(stderr, "%6d", sum10 + 10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "   (%d+%d)", (sum100 - carry10), carry10);
+			fprintf(stderr, "%4d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			///next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
+		}
+			
+		if ((carry10 == 0) && (carry100 == 1) && (carry1000 == 0))
+		{
+//			fprintf(stderr, "test\n");
+			fprintf(stderr, "%9d", sum1000 - carry100);
+			fprintf(stderr, "   (%d+%d)", (sum1000 - carry100), (sum10 - sum1)); 
+			fprintf(stderr, " (%d+%d)", (sum10 - sum1), sum1);
+			fprintf(stderr, "%4d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", (sum1000 - carry100));
+			fprintf(stderr, "%6d", (sum100 + 10));
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "      (%d+%d)", (sum1000 - carry100), carry100);
+			fprintf(stderr, "%4d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			///next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
+		
+		}
+		if ((carry10 == 1) && (carry100 == 1) && (carry1000 == 0))
+		{
+//			fprintf(stderr, "test\n");
+			fprintf(stderr, "%9d", sum1000 - carry100);
+			fprintf(stderr, "   (%d+%d)", (sum1000 - carry100), ((sum10 + 10) - sum1)); 
+			fprintf(stderr, " (%d+%d)", ((sum10 + 10) - sum1), sum1);
+			fprintf(stderr, "%4d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", (sum1000 - carry100));
+			fprintf(stderr, "%6d", ((sum100 - carry10) +10));
+			fprintf(stderr, "%6d", (sum10 + 10));
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "      (%d+%d)", (sum1000 - carry100), carry100);
+			fprintf(stderr, " (%d+%d)", (sum100 - carry10), carry10);
+			fprintf(stderr, "%4d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			///next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
+		
+		}
+
+		if ((carry10 == 0) && (carry100 == 1) && (carry1000 == 1))
+		{
+//			fprintf(stderr, "test\n");
+			fprintf(stderr, "%9d", ((sum1000 + 10) - carry100));
+			fprintf(stderr, "   (%d+%d)", ((sum1000 + 10) - carry100), (sum10 - sum1)); 
+			fprintf(stderr, " (%d+%d)", (sum10), sum1);
+			fprintf(stderr, "%4d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", ((sum1000 + 10) - carry100));
+			fprintf(stderr, "%6d", ((sum100 - carry10) +10));
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "      (%d+%d)", ((sum1000 + 10) - carry100), carry100);
+			fprintf(stderr, "%4d", (sum100 - carry10));
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			///next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", (sum1000 + 10));
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "(%d+%d)", (sum10000 - carry1000), sum10000);
+			fprintf(stderr, "%4d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%3d", sum10000);
+			fprintf(stderr, "%6d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d%d%d\n", sum10000, sum1000, sum100, sum10, sum1);
+		
+		}
+
+
+
+		fprintf(stderr, "sum1-10000: %d %d %d %d %d. carry10 to 1000: %d %d %d.\n", sum1, sum10, sum100, sum1000, sum10000,
+		carry10, carry100, carry1000);
 
 
 
