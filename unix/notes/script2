@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# script2 - another a-mazing script.
+#
+echo -n "Gimme a nubmer: "
+read number
+
+let result=number+7
+
+# way the 1: math with let
+echo "${number} + 7 = ${result}"
+
+# way the 2: pockets of arithmetic
+result=$((${number}+19))
+echo "${number} + 19 = ${result}"
+# way the 3: use a calculator
+result=`echo "${number}+37" | bc -q`
+echo "${number} + 37 = ${result}"
+
+exit 0
+

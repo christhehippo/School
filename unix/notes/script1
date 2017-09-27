@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# script1 - my firstest, bestest, script 3v4r
+#
+echo -n "Please enter a value: "
+read value
+
+echo "The value you entered was ${value}"
+
+exit 0
+

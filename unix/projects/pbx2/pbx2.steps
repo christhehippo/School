@@ -1,0 +1,18 @@
+#!/bin/bash
+
+mkdir ~/src/unix/projects/pbx2
+cd /var/public/unix/pbx2/ccattell
+cp pbx2.zip ~/src/unix/projects/pbx2/pbx2.zip
+cd ~/src/unix/projects/pbx2
+unzip pbx2.zip
+52a5d4f8
+ce6c3e9f
+gcc -o hex2ascii hex2ascii.c
+gcc -o octal2ascii octal2ascii.c
+uudecoded enigmatic.file
+cat part1 part2 part3 part4 | sort -n > pbx2.results
+
+
+
+
+

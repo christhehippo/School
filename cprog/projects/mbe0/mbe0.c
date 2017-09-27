@@ -18,6 +18,12 @@ int main ()
 	//if = 2 or less digits, else = 3 or more digits
 	if ((input / 100) == 0)
 	{
+
+		//Here is the math for the two digit input
+		//I made sure all the two digits worked before I touched anything to do with three digits
+		
+		//for when I do mbe1, I see a lot of ways I could have saved myself work and made this a bit shorter
+
 		//first piece output
 		fprintf(stderr, "%3hu x 11 = ", input);
 
@@ -111,6 +117,10 @@ int main ()
 	}		
 	else
 	{
+		//Here is the math for the 3 digit stuff, more or less the same as the two digit
+		//I am guessing some of it could be done at variable declaration but to be safe I just 
+		//did it for each case
+
 		//first piece of output
 		fprintf(stderr, "%3hu x 11 = ", input);
 		
@@ -154,7 +164,12 @@ int main ()
 		}
 
 		sum10000 = carry1000;
-		
+
+		//ALL THE FOLLOWING IS DRAWN OUT CONDITIONS FOR THE POSSIBLE INPUTS
+		//THEY ALL BUILD ON EACH OTHER AND FOLLOW THE SAME GENERAL FORMAT
+
+		//sorry for not combining lines, it makes more sense to me if I do it one line at a time
+
 		//no carries output
 		if ((carry10 == 0) && (carry100 == 0) && (carry1000 == 0))
 		{
@@ -171,6 +186,8 @@ int main ()
 			//next line
 			fprintf(stderr, "         = ");
 			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
+			
+			return (0);	
 		}
 		
 		if ((carry10 == 1) && (carry100 == 0) && (carry1000 == 0))
@@ -201,6 +218,8 @@ int main ()
 			//next line
 			fprintf(stderr, "         = ");
 			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
+			
+			return (0);
 		}
 			
 		if ((carry10 == 0) && (carry100 == 1) && (carry1000 == 0))
@@ -231,8 +250,10 @@ int main ()
 			//next line
 			fprintf(stderr, "         = ");
 			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
-		
+			
+			return (0);
 		}
+		
 		if ((carry10 == 1) && (carry100 == 1) && (carry1000 == 0))
 		{
 //			fprintf(stderr, "test\n");
@@ -261,7 +282,8 @@ int main ()
 			//next line
 			fprintf(stderr, "         = ");
 			fprintf(stdout, "%d%d%d%d\n", sum1000, sum100, sum10, sum1);
-		
+			
+			return (0);
 		}
 
 		if ((carry10 == 0) && (carry100 == 1) && (carry1000 == 1))
@@ -269,7 +291,7 @@ int main ()
 //			fprintf(stderr, "test\n");
 			fprintf(stderr, "%9d", ((sum1000 + 10) - carry100));
 			fprintf(stderr, "   (%d+%d)", ((sum1000 + 10) - carry100), (sum10 - sum1)); 
-			fprintf(stderr, " (%d+%d)", (sum10), sum1);
+			fprintf(stderr, " (%d+%d)", (sum10 - sum1), sum1);
 			fprintf(stderr, "%4d\n", sum1);
 			//next line
 			fprintf(stderr, "         = ");
@@ -307,12 +329,58 @@ int main ()
 			fprintf(stderr, "         = ");
 			fprintf(stdout, "%d%d%d%d%d\n", sum10000, sum1000, sum100, sum10, sum1);
 		
+			return (0);
+		}	
+
+		if ((carry10 == 1) && (carry100 == 1) && (carry1000 == 1))
+		{
+//			fprintf(stderr, "test\n");
+			fprintf(stderr, "%9d", ((sum1000 + 10) - carry100));
+			fprintf(stderr, "   (%d+%d)", ((sum1000 + 10) - carry100), sum100); 
+			fprintf(stderr, " (%d+%d)", (sum100), sum1);
+			fprintf(stderr, "%4d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", ((sum1000 + 10) - carry100));
+			fprintf(stderr, "%6d", ((sum100 + 10) - carry10) );
+			fprintf(stderr, "%6d", (sum10 + 10));
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "      (%d+%d)", ((sum1000 + 10) - carry100), carry100);
+			fprintf(stderr, " (%d+%d)", (sum100 - carry10), carry10);
+			fprintf(stderr, "%4d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			///next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%9d", (sum1000 + 10));
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "(%d+%d)", (sum10000 - carry1000), sum10000);
+			fprintf(stderr, "%4d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stderr, "%3d", sum10000);
+			fprintf(stderr, "%6d", sum1000);
+			fprintf(stderr, "%6d", sum100);
+			fprintf(stderr, "%6d", sum10);
+			fprintf(stderr, "%6d\n", sum1);
+			//next line
+			fprintf(stderr, "         = ");
+			fprintf(stdout, "%d%d%d%d%d\n", sum10000, sum1000, sum100, sum10, sum1);
+			
+			return (0);
 		}
 
 
-
-		fprintf(stderr, "sum1-10000: %d %d %d %d %d. carry10 to 1000: %d %d %d.\n", sum1, sum10, sum100, sum1000, sum10000,
-		carry10, carry100, carry1000);
+//		fprintf(stderr, "sum1-10000: %d %d %d %d %d. carry10 to 1000: %d %d %d.\n", sum1, sum10, sum100, sum1000, sum10000,
+//		carry10, carry100, carry1000);
 
 
 
