@@ -54,11 +54,11 @@ int main(int argc, char **argv)
 	
 	gdImageFilledRectangle (img, 0, 0, wide-1, high-1, color[BLACK]);
 
-	gdImageRectangle (img, 20, 20, 200, 100, color[WHITE]);
+	gdImageRectangle (img, 20, 20, 500, 100, color[WHITE]);
 	gdImageFilledRectangle (img, (wide/4), (high-(high/4)), 4000, 350, color[FOOF]);
 
-	gdImageFilledArc (img, (wide/2), 300, 150, 80, 0, 360, color[RED], gdArc);
-	gdImageFilledArc (img, (wide/4), 500, 180, 180, 45, 315, color[BLUE], gdArc);
+	gdImageFilledArc (img, (wide/2), 300, 150, 80, 0, 360, color[BLACK], gdArc);
+	gdImageFilledArc (img, (wide/5), 500, 180, 180, 45, 315, color[BLUE], gdArc);
 
 
 	out			 = fopen (outfile, "w");
