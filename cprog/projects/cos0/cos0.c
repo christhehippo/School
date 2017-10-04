@@ -32,7 +32,8 @@ int main(int argc, char **argv)
     unsigned int        color[5];          							 // color array
     unsigned short int  wide, high, radius, xCenter, yCenter;        // image attributes
  
-
+	// Checking to see if the user wants the default name of cos0.png or if they want to name
+	// the file themselves. .png is added to the end of the filename.
 	if(argc == 7)
 	{
 		char filename[16];
@@ -53,11 +54,15 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	
+	// convert pointer array to workable value
 	wide    = strtol(argv[1], NULL, 10);
 	high    = strtol(argv[2], NULL, 10);
 	radius  = strtol(argv[3], NULL, 10);
 	xCenter = strtol(argv[4], NULL, 10);
 	yCenter = strtol(argv[5], NULL, 10);
+	
+	// If the user puts a 0 for either of the values of the midpoint, it will
+	// automatically replace the 0 with the mid point in regards to x or y.
 	if (xCenter == 0)
 	{
 		xCenter = ((wide-1)/2);
@@ -108,7 +113,9 @@ int main(int argc, char **argv)
 	//	using the math.h lib. x^2 + y^2 = radius^2 , y = sqrt(radius^2 - x^2). Then 
 	//  offset the points with the center values in order to deal with not starting at 
 	//  point (0,0). Then I repeated the process, but used y in x's place. This filled 
-	//  the holes in the circle since they aren't very linear.
+	//  the holes in the circle since they aren't very linear. The use of 4 loops wasn't 
+	// 	needed, but the number of things that could go wrong with this (and did go wrong)
+	//  was pretty high. Isolating things helps isolate problems.
 	
 	unsigned short int xRadius, yRadius, diam;
 	xRadius = xCenter + radius;

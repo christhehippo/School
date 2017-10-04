@@ -1,0 +1,749 @@
+#!/bin/bash
+##
+## urev - an interactive UNIX skill review script
+##
+
+CMD="/bin/cat"
+${CMD} /etc/motd >/dev/null 2>/dev/null || echo "Universe alignment error"
+${CMD} <<< "verify" | grep "verify" >/dev/null 2>/dev/null || echo "Error in functionality (check for tears in space and time)"
+${CMD} <<< "verify" | grep "verify" >/dev/null 2>/dev/null || exit 1
+
+if [ ! -r "${CMD}" ]; then
+    echo " --> ${CMD} not found"
+else
+    if [ ! -x "${CMD}" ]; then
+        echo " --> ${CMD} not executable by user"
+    fi
+fi
+
+${CMD} /etc/motd >/dev/null 2>/dev/null || exit 1
+
+######################################################################
+##
+## Variables
+##
+HOMEDIR="/home/${USER}"
+PROJECT="usr0"
+SEMESTER="`${CMD} /usr/local/etc/semester`"
+SUBMITDIR="/var/submit/${SEMESTER}/unix/${PROJECT}"
+STRIKES=4
+
+######################################################################
+##
+## Determine if we are running as part of class project
+##
+if [ -w "${SUBMITDIR}" ] && [ -x "${SUBMITDIR}" ]; then
+    USERDIR="${SUBMITDIR}/${USER}"
+    LEVEL=96
+    MINQUOTA=144
+    QUOTA=192
+    RNUM=12
+    DELHR=0
+    DELAY=7168
+	DPERM="0750"
+	FPERM="0640"
+
+######################################################################
+##
+## ... or independent of a class project
+##
+else
+    SUBMITDIR="${HOMEDIR}/.urev"
+    USERDIR="${SUBMITDIR}"
+    LEVEL=128
+    MINQUOTA=1536
+    QUOTA=2048
+    RNUM=16
+    DELAY=3584
+    DELHR=1
+	DPERM="0700"
+	FPERM="0600"
+fi
+STATFILE="${USERDIR}/status"
+DATAFILE="${HOMEDIR}/.urev/status"
+
+######################################################################
+##
+## Make sure destination locations and datafiles exist and are
+## adequately accessible
+##
+for datapath in ${USERDIR} ${HOMEDIR}/.urev; do
+
+    ##################################################################
+    ##
+    ## Ensure destination directory exists
+    ##
+    if [ ! -w "${datapath}" ]; then
+        mkdir -p       ${datapath}
+        chmod ${DPERM} ${datapath}
+    fi
+
+    ##################################################################
+    ##
+    ## Initialize STATFILE if missing
+    ##
+    if [ ! -e "${datapath}/status" ]; then
+        INITDATA="score:0\nsession:0\nwrong:0\nwrongtally:0\ntotal:0\n"
+        printf         "${INITDATA}"                     >  ${datapath}/status
+        touch          ${datapath}/incorrect
+        chmod ${FPERM} ${datapath}/status ${datapath}/incorrect
+        if [ ! "${USER}" = "wedge" ]; then
+            chgrp -R   ${USER} ${USERDIR}
+        fi
+		score=0
+		session=0
+		setrep=0
+		wrong=0
+		grandtotal=0
+		session=0
+		wrongtally=0
+		timestamp=$(date -d `date +%Y-01-01` +%s)
+    fi
+done
+
+function typespec()
+{
+    typeval=$((${RANDOM}%24))
+    if [ "${typeval}"   -lt  8 ]; then
+        typechar="d"
+    elif [ "${typeval}" -eq  8 ]; then
+        typechar="p"
+    elif [ "${typeval}" -eq  9 ]; then
+        typechar="s"
+    elif [ "${typeval}" -eq 10 ]; then
+        typechar="l"
+    elif [ "${typeval}" -eq 11 ]; then
+        typechar="b"
+    elif [ "${typeval}" -eq 12 ]; then
+        typechar="c"
+    else
+        typechar="-"
+    fi
+    echo -n "${typechar}"
+}
+
+function modespec()
+{
+    modeval=$((${RANDOM}%48))
+    if [ "${modeval}"   -lt  4 ]; then
+        modechar="---"
+    elif [ "${modeval}" -lt  8 ]; then
+        modechar="--x"
+    elif [ "${modeval}" -lt 12 ]; then
+        modechar="-w-"
+    elif [ "${modeval}" -eq 12 ]; then
+        modechar="-wx"
+    elif [ "${modeval}" -lt 16 ]; then
+        modechar="r--"
+    elif [ "${modeval}" -lt 24 ]; then
+        modechar="r-x"
+    elif [ "${modeval}" -lt 32 ]; then
+        modechar="rw-"
+    else
+        modechar="rwx"
+    fi
+
+    echo -n "${modechar}"
+}
+
+function filetype()
+{
+    typechar="$(typespec)"
+    printf "\t%s" "${typechar}"
+}
+
+function modetype()
+{
+    modechar="$(modespec)"
+    echo -n "${modechar}"
+}
+
+function setmodechk()
+{
+    result=0
+
+    ##################################################################
+    ##
+    ## Check for SetUID bit
+    ##
+    value=`echo "${1}" | cut -c3`
+    if [ "${value}" = "s" ]; then
+        let result=${result}+4
+    elif [ "${value}" = "S" ]; then
+        let result=${result}+4
+    fi
+
+    ##################################################################
+    ##
+    ## Check for SetGID bit
+    ##
+    value=`echo "${1}" | cut -c6`
+    if [ "${value}" = "s" ]; then
+        let result=${result}+2
+    elif [ "${value}" = "S" ]; then
+        let result=${result}+2
+    fi
+
+    ##################################################################
+    ##
+    ## Check for Sticky bit
+    ##
+    value=`echo "${1}" | cut -c9`
+    if [ "${value}" = "t" ]; then
+        let result=${result}+1
+    elif [ "${value}" = "T" ]; then
+        let result=${result}+1
+    fi
+
+    echo -n "${result}"
+}
+
+######################################################################
+##
+## modechk() calculates the octal value for a given field, against
+##           a user entered value. When done, it will display the
+##           resulting octal value (if a match), or an 'X' which
+##           indicates a non-match
+##
+##      $1 - the 3 char string containing permission bits "rw-"
+##      $2 - the octal value we are comparing against the string
+##
+function modechk()
+{
+    result=0
+    for((i=1; i<=3; i++)); do
+        value=`echo "${1}" | cut -c${i}`
+        if [ "${value}"   = "r" ]; then
+            let result=${result}+4
+        elif [ "${value}" = "w" ]; then
+            let result=${result}+2
+        elif [ "${value}" = "x" ]; then
+            let result=${result}+1
+        elif [ "${value}" = "s" ]; then
+            let result=${result}+1
+        elif [ "${value}" = "t" ]; then
+            let result=${result}+1
+        else
+            let result=${result}+0
+        fi    
+    done
+
+    if [ "${result}" = "${2}" ]; then
+        echo -n "${2}"
+    else
+        echo -n "X"
+    fi
+}
+
+if [ ! -z "${UREVDELAY}" ]; then
+    DELAY="${UREVDELAY}"
+fi
+
+score=`${CMD} ${STATFILE}      | grep '^score:'      | cut -d':' -f2`
+session=`${CMD} ${STATFILE}    | grep '^session:'    | cut -d':' -f2`
+setrep=`${CMD} ${STATFILE}     | grep '^setrep:'     | cut -d':' -f2`
+wrong=`${CMD} ${STATFILE}      | grep '^wrong:'      | cut -d':' -f2`
+wrongtally=`${CMD} ${STATFILE} | grep '^wrongtally:' | cut -d':' -f2`
+grandtotal=`${CMD} ${STATFILE} | grep '^total:'      | cut -d':' -f2`
+timestamp=`${CMD} ${DATAFILE}  | grep '^timestamp:'  | cut -d':' -f2`
+
+if [ "${grandtotal}" -ge "${QUOTA}" ]; then
+    echo
+    echo "You have reached your quota for the project."
+    echo
+    exit 0
+fi
+
+curdate=`date +%s`
+#let future=${timestamp}+${DELAY}
+#if [ "${curdate}" -lt ${future} ]; then
+#    let datediff=${future}-${curdate}
+#    hours=0
+#    minutes=0
+#
+#    let offset=${datediff}
+#    hours=`echo   "${offset}/3600"            | bc -q`
+#    offset=`echo  "${offset}-(${hours}*3600)" | bc -q`
+#    minutes=`echo "${offset}/60"              | bc -q`
+#    seconds=`echo "${offset}-(${minutes}*60)" | bc -q`
+#    let offset=${offset}-${seconds}
+#
+#    clear
+#    echo
+#    echo "It has not yet been two (${DELHR}) hours since completing your last"
+ #   echo "set repetition. Please come back in ${hours} hours ${minutes} minutes."
+  #  echo
+   # exit 0
+#fi
+#*/
+total=`echo "${grandtotal}%100" | bc -q`
+init="${total}"
+goodtally=0
+correct=0
+bonusflag=
+quit=
+setiter=0
+
+while [ -z "${quit}" ]; do
+
+    if [ "${total}" -eq "${init}" ]; then
+        trap "quit=true; break 2>/dev/null" EXIT SIGINT
+    fi
+
+    if [ "${score}" -eq 0 ]; then
+        clear
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo "*****************************************************************"
+        echo "*** Welcome to urev, the UNIX skills review program.  In this ***"
+        echo "*** program you will  get to put your  skills to the test  as ***"
+        echo "*** you are prompted with various UNIX file permissions (just ***"
+        echo "*** as you'd see from an 'ls -l' output). Your task is to put ***"
+        echo "*** down the 3  octet mode  based on the  displayed  symbolic ***"
+        echo "*** permission. Your progress will be analyzed; correct input ***"
+        echo "*** will earn you points, but  missing values can  eventually ***"
+        echo "*** diminish your score. Be careful typing in values! You can ***"
+        echo "*** NOT undo or hit backspace to scrub out a  mistyped value. ***"
+        echo "***                                                           ***"
+        echo "*** Each session lasts for ${RNUM} rounds, at which point you have ***"
+        echo "*** a timed delay before you can try again (so you don't ruin ***"
+        echo "*** the fun by doing it all at once!)                         ***"
+        echo "*****************************************************************"
+        echo
+        echo
+        echo -n "Press ENTER to begin."
+        read junk
+    fi
+
+    if [ "${score}" -eq "${LEVEL}" ]; then
+        clear
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo
+        echo "*****************************************************************"
+        echo "*** MODE CHANGE: Permissions will now be presented in 4 octet ***"
+        echo "*** octal values.  This means the SetUID, SetGID,  and Sticky ***"
+        echo "*** bits  will start to make  appearances in  the permissions ***"
+        echo "*** that are displayed.  If there are no values to  report in ***"
+        echo "*** this upper range, you must prefix a '0' before you finish ***"
+        echo "*** the octal mode (ie if the permission is 750, you MUST put ***"
+        echo "*** 0750 from this  point on or you may be  marked incorrect! ***"
+        echo "*****************************************************************"
+        echo
+        echo
+        echo -n "Press ENTER to be prompted for confirmation"
+        read junk
+        echo -n "NOTE: 4 octet permissions follow. Press ENTER to continue"
+        read junk
+    fi
+
+    clear
+    printf "[Session: %3s] [Set: %3s] [Iteration: %3s / 100] " "${session}" "${setrep}" "${total}"
+
+    if [ "${wrongtally}" -gt 0 ]; then
+        if [ "${goodtally}" -gt 0 ]; then
+            tallydisplay=
+            for((i=0; i<${goodtally}; i++)); do
+                if [ "${i}" -lt 4 ]; then
+                    tallydisplay="${tallydisplay}-"
+                else
+                    tallydisplay="${tallydisplay}="
+                fi
+            done
+            printf "[ %-8s ]" "${tallydisplay}"
+        fi
+    fi
+
+    echo
+    printf "[Score:   %3s] [ # correct: ${correct} / # incorrect: ${wrong} ] " "${score}"
+    
+    if [ "${wrongtally}" -gt 0 ]; then
+        tallydisplay=
+        for((i=0; i<${wrongtally}; i++)); do
+            tallydisplay="${tallydisplay}X "
+        done
+        printf "[ %6s ]" "${tallydisplay}"
+    fi
+
+    echo
+    echo
+    echo
+    echo
+
+    ##################################################################
+    ##
+    ## Skill-level information display spacing. The less experience
+    ## the user has, the more on-screen help and aid received.
+    ## As skill increases, we get closer to reality.
+    ##
+    if [ "${score}" -lt "$((${LEVEL}/8))" ]; then
+        space="    "
+        ispace=" "
+        header="          u ${space} g ${space} o"
+        xspace="  "
+    elif [ "${score}" -lt "$((${LEVEL}/4))" ]; then
+        space="   "
+        ispace="  "
+        header="         u ${space} g ${space} o"
+        xspace="  "
+    elif [ "${score}" -lt "$((${LEVEL}/3))" ]; then
+        space="  "
+        ispace="   "
+        header=
+        xspace="  "
+    elif [ "${score}" -lt "$((${LEVEL}/2))" ]; then
+        space=" "
+        ispace="    "
+        header=
+        xspace="  "
+    elif [ "${score}" -lt "${LEVEL}" ]; then
+        space=
+        ispace="     "
+        header=
+        xspace="  "
+    else
+        space=
+        ispace=
+        xspace=
+        header=
+    fi
+    margin="            "
+
+    echo "${margin}${header}"
+
+    ##################################################################
+    ##
+    ## Obtain the values for the current problem
+    ##
+    user=$(modetype) 
+    group=$(modetype)
+    other=$(modetype)
+
+    ##################################################################
+    ##
+    ## Once we effectively get through the first session, revert to a
+    ## side-by-side mode, so we can start evaluating the setbit field
+    ##
+    if [ "${score}" -lt "${LEVEL}" ]; then
+        echo "${margin}$(filetype)${space}${user}${space}${group}${space}${other}"
+        echo -n "${margin}"
+        TALLYMAX=3
+    else
+        TALLYMAX=4
+
+        modeval=$((${RANDOM}%8))
+        if [ "${modeval}" -le 4 ]; then
+            modeval=0
+        fi
+
+        ##############################################################
+        ##
+        ## 3/4 split. If the first 4, no change (0 for the field)
+        ## otherwise, overlay it.
+        ##
+
+        ##############################################################
+        ##
+        ## SetUID bit
+        ##
+        if [ "${modeval}" -ge 4 ]; then
+            last=`echo "${user}" | sed 's/^..\(.\)$/\1/'`
+            if [ "${last}" = "-" ]; then
+                user=`echo ${user} | sed 's/^\(..\)-/\1S/'` 
+            else
+                user=`echo ${user} | sed 's/^\(..\)./\1s/'` 
+            fi
+
+            let modeval=${modeval}-4
+        fi
+
+        ##############################################################
+        ##
+        ## SetGID bit
+        ##
+        if [ "${modeval}" -ge 2 ]; then
+            last=`echo "${group}" | sed 's/^..\(.\)$/\1/'`
+            if [ "${last}" = "-" ]; then
+                group=`echo ${group} | sed 's/^\(..\)-/\1S/'` 
+            else
+                group=`echo ${group} | sed 's/^\(..\)./\1s/'` 
+            fi
+
+            let modeval=${modeval}-2
+        fi
+
+        ##############################################################
+        ##
+        ## Set sticky bit
+        ##
+        if [ "${modeval}" -ge 1 ]; then
+            last=`echo "${other}" | sed 's/^..\(.\)$/\1/'`
+            if [ "${last}" = "-" ]; then
+                other=`echo ${other} | sed 's/^\(..\)-/\1T/'` 
+            else
+                other=`echo ${other} | sed 's/^\(..\)./\1t/'` 
+            fi
+
+            let modeval=${modeval}-1
+        fi
+
+        setbit=$(setmodechk ${user}${group}${other})
+        echo -n "$(filetype)${space}${user}${space}${group}${space}${other}"
+    fi
+    
+    echo -n "${space}${space}${ispace} "
+
+    ##################################################################
+    ##
+    ## Input time. Evaluate user input for correctness.
+    ##
+    tally=0
+    userset=
+    response=
+
+    if [ "${TALLYMAX}" -eq 4 ]; then
+        read -s -r -n 1 entry
+        nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+        while [ -z "${entry}" ] || [ "${nonchk}" -gt 0 ]; do
+            read -s -r -n 1 entry
+            nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+        done
+        moderet="${entry}"
+        if [ "${moderet}" = "${setbit}" ]; then
+            let tally=${tally}+1
+        elif [ "${setbit}" -eq 0 ]; then
+
+            ##########################################################
+            ##
+            ## if the setbit is 0, and the user specifies the correct
+            ## user field bit, assume they omitted this fourth field
+            ## and proceed as if we're tallying 3 bits.
+            ##
+            if [ "${moderet}" = "$(modechk ${user} ${entry})" ]; then
+                let tally=${tally}+2
+                userset=true
+            fi
+        else
+            moderet="X"
+        fi
+        echo -n "${moderet}${space}${xspace}"
+        response="${entry}"
+    fi
+
+    if [ -z "${userset}" ]; then
+        read -s -r -n 1 entry
+        nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+        while [ -z "${entry}" ] || [ "${nonchk}" -gt 0 ]; do
+            read -s -r -n 1 entry
+            nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+        done
+        moderet=$(modechk ${user} ${entry})
+        if [ ! "${moderet}" = "X" ]; then
+            let tally=${tally}+1
+        fi
+        echo -n "${moderet}${space}${xspace}"
+        response="${response}${entry}"
+    fi
+
+    read -s -r -n 1 entry
+    nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+    while [ -z "${entry}" ] || [ "${nonchk}" -gt 0 ]; do
+        read -s -r -n 1 entry
+        nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+    done
+    moderet=$(modechk ${group} ${entry})
+    if [ ! "${moderet}" = "X" ]; then
+        let tally=${tally}+1
+    fi
+    echo -n "${moderet}${space}${xspace}"
+    response="${response}${entry}"
+
+    read -s -r -n 1 entry
+    nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+    while [ -z "${entry}" ] || [ "${nonchk}" -gt 0 ]; do
+        read -s -r -n 1 entry
+        nonchk=$(echo "${entry}" | grep '^[^0-9]$' | wc -l)
+    done
+    moderet=$(modechk ${other} ${entry})
+    if [ ! "${moderet}" = "X" ]; then
+        let tally=${tally}+1
+    fi
+    echo -n "${moderet}${space}${xspace}"
+    response="${response}${entry}"
+
+    if [ "${tally}" -eq "${TALLYMAX}" ]; then
+        let correct=${correct}+1
+
+        ##############################################################
+        ##
+        ## Potential bonus points rewarded for endurance
+        ##
+        if [ ${correct} -gt 31 ]; then
+            if [ -z "${bonusflag}" ]; then
+                let score=${score}+1
+                bonusflag="set"
+            fi
+        elif [ ${correct} -gt 63 ]; then
+            if [ "${bonusflag}" = "set" ]; then
+                let score=${score}+2
+                bonusflag="superset"
+            fi
+        elif [ ${correct} -gt 95 ]; then
+            if [ "${bonusflag}" = "superset" ]; then
+                let score=${score}+4
+                bonusflag="superwowiezowieset"
+            fi
+        fi
+
+        let score=${score}+1
+
+        echo "    CORRECT"
+
+        if [ "${wrongtally}" -gt 0 ]; then
+            let goodtally=${goodtally}+1
+        fi
+
+        sleep 0.25
+    else
+
+        ##############################################################
+        ##
+        ## An error has taken place, increment the wrongtally
+        ##
+        let wrongtally=${wrongtally}+1
+
+        ##############################################################
+        ##
+        ## Depending on the user's buffer of correctness,
+        ## reduce goodtally as appropriate (the better they
+        ## have been doing lately, the lower the cost). 
+        ##
+        if [ ${correct} -ge 64 ]; then
+            let goodtally=4
+        elif [ ${correct} -ge 48 ]; then
+            let goodtally=2
+        elif [ ${correct} -ge 16 ]; then
+            if [ ${goodtally} -gt 0 ]; then
+                let goodtally=${goodtally}-1
+            fi
+        elif [ ${correct} -ge 12 ]; then
+            if [ ${goodtally} -gt 1 ]; then
+                let goodtally=${goodtally}-2
+            fi
+        elif [ ${correct} -ge 8 ]; then
+            if [ ${goodtally} -gt 3 ]; then
+                let goodtally=${goodtally}-4
+            fi
+        else
+            goodtally=0
+        fi
+
+        ##############################################################
+        ##
+        ## Hit the strike threshold and a point is lost
+        ##
+        if [ ${wrongtally} -eq ${STRIKES} ]; then
+            if [ ${score} -gt 0 ]; then
+                let score=${score}-1
+            fi
+            goodtally=0
+            wrongtally=0
+        fi
+
+        echo "    INCORRECT"
+        let wrong=${wrong}+1
+        correct=0
+
+        ##############################################################
+        ##
+        ## Record missed item with user's response for later review
+        ##
+        echo "modeident:$(filetype)${user}${group}${other}:${response}" >> ${USERDIR}/incorrect
+
+        sleep 0.50
+    fi
+
+    ##################################################################
+    ##
+    ## If user has accumulated 8 correct tallies, we can nullify
+    ## a wrong tally mark against us
+    ##
+    if [ "${goodtally}" -eq 8 ]; then
+        if [ "${wrongtally}" -gt 0 ]; then
+            let wrongtally=${wrongtally}-1
+        fi
+        goodtally=0
+    fi
+
+    ##################################################################
+    ##
+    ## Iterate important session variables
+    ##
+    let setiter=${setiter}+1
+    let total=${total}+1
+    let grandtotal=${grandtotal}+1
+
+    ##################################################################
+    ##
+    ## record current statistics to user's status file
+    ##
+    printf "score:${score}\n"                            >  ${STATFILE}
+    printf "wrong:${wrong}\n"                            >> ${STATFILE}
+    printf "wrongtally:${wrongtally}\n"                  >> ${STATFILE}
+    printf "total:${grandtotal}\n"                       >> ${STATFILE}
+    printf "session:${session}\n"                        >> ${STATFILE}
+    printf "setrep:${setrep}\n"                          >> ${STATFILE}
+
+    if [ "${grandtotal}" -ge "${MINQUOTA}" ] && [ -z "${LOGGED}" ]; then
+        ${CMD} ${STATFILE} | grep -v '^session:'         >  ${STATFILE}.new
+        mv -f ${STATFILE}.new ${STATFILE}
+        printf "session:${session}\n"                    >> ${STATFILE}
+        echo "result:${score}/${total}"                  >> ${STATFILE}
+
+        date +%Y%m%d-%H%M%S                              >> ${USERDIR}/log
+        echo "${USER}:${PROJECT}:$(date +%Y%m%d-%H%M%S)" >> ${SUBMITDIR}/log
+        LOGGED="true"
+    fi
+
+    ##################################################################
+    ##
+    ## Check for project completion
+    ##
+    if [ "${setiter}" -eq "${RNUM}" ]; then
+        echo
+        echo "Set Repetition COMPLETE."
+        echo
+        if [ "${grandtotal}" -ge "${MINQUOTA}" ]; then
+            echo "You have reached the minimum quota! Your project is now"
+            echo "considered submitted. If you would like to do additional"
+            echo "problems up to the max quota, you may do so, but know"
+            echo "that it is not required."
+        fi
+        echo
+        quit=true
+        let setrep=${setrep}+1
+        setiter=0
+
+        ${CMD} ${STATFILE} | grep -v '^setrep:'          >  ${STATFILE}.new
+        mv -f ${STATFILE}.new ${STATFILE}
+        printf "setrep:${setrep}\n"                      >> ${STATFILE}
+    fi
+done
+
+timestamp=`date +%s`
+${CMD} ${DATAFILE} | grep -v '^timestamp:'               >  ${DATAFILE}.new
+mv -f ${DATAFILE}.new ${DATAFILE}
+printf "timestamp:${timestamp}\n"                        >> ${DATAFILE}
+
+exit 0
