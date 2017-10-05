@@ -1,0 +1,25 @@
+#!/bin/bash
+#
+#
+
+mkdir ~/src/unix/projects/ukatest 
+cp /var/public/unix/uka0/ccattell/README ~/src/unix/projects/ukatest/README
+cp /var/public/unix/uka0/ccattell/uka0.bas ~/src/unix/projects/ukatest/uka0.bas
+cd ~/src/unix/projects/ukatest
+cp uka0.bas uka0.xz
+unxz uka0.xz
+unzip uka0
+cat datafile | cut 1-39 > lefthalf
+cat datafile | cut 41- > righthalf
+cat lefthalf | tail -n 15 | rev > q3
+cat lefthalf | head -n 15 | rev > q2
+cat q2 q3 > lefthalfDONE
+cat righthalf | tail -n 15 | rev > q13
+cat righthalf | head -n 15 | rev > q4
+cat q1 q4 > righthalfDONE
+paste lefthalfDONE righthalfDONE -d X > almost
+sed 's/X//g' almost > uka0.results
+cat uka0.results
+
+
+
