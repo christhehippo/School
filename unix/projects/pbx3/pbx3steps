@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+#pbx3 - Christian Cattell
+#
+#
+cd ~/src/unix/projects
+mkdir pbx3.t
+cd pbx3.t
+cp /var/public/unix/pbx3/ccattell/pbx3.csv pbx3.csv
+cp pbx3.csv pbx3.gz
+gunzip -d pbx3.gz
+tar -xvf pbx3
+cat datapart1 | rev > q2
+tar -xvf datapart2
+cat part2 > q1
+cat datapart3 | rev > q3
+uudecode datapart4
+chmod 777 datapart4
+cat datapart4 > q4
+cat q2 q3 > left
+cat q1 q4 > right
+paste -d '\0' left right > pbx3.results
+cat pbx3.results
+
+
+

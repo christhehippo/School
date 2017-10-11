@@ -1,3 +1,16 @@
+/////////////////////////////////////////////////////////////////////////////////////
+// Primereg.c - brute force calculation of prime numbers
+// 
+//---REQUIRES 2 ARGUMENTS, ACCEPTS UP TO 4---
+//	- argument 1 - number of primes to calculate; if 0 stop calculations at upper bound
+//	- argument 2 - set to 1 always, no functionality yet
+//  - arguemnt 3 (optional) - lower bound, what number to begin calculations on, if left blank it is 2
+//  - argument 4 (optional) - upper bound, what number to stop calculations at
+//
+//	TO COMPILE: gcc -Wall -o primereg primereg.c
+//  TO RUN: ./primereg [number] [number] [number(optional)] [number(optional)]
+//
+/////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
@@ -17,7 +30,7 @@ int main(int argc, char **argv)
 	//
 	if (argc <  3)
 	{
-		fprintf (stderr, "%s: insufficient number of arguments\n", argv[0]);
+		fprintf (stderr, "%s: insufficient number of arguments!\n", argv[0]);
 		exit (1);
 	}
 	//////////////////////////////////////////////////////////////////
@@ -67,6 +80,10 @@ int main(int argc, char **argv)
 	{
 		lowerBound = atoi(argv[3]);
 		upperBound = atoi(argv[4]);
+		if (upperBound == 0)
+		{
+			upperBound = 2147483647;
+		}
 		
 	}
 	else if (argc == 4)
@@ -105,21 +122,24 @@ int main(int argc, char **argv)
 	
 	for (forOne = lowerBound; forOne <= upperBound; forOne++)
 	{
-		for (forTwo = 2; forTwo < forOne; forTwo++)
+		//start second loop at 2, divided into forOne, then increase
+		for (forTwo = 2; forTwo <= forOne; forTwo++)
 		{
-			//if a number isnt prime, the prime check becomes greater than 0
+			//check if loop is done
+			if (forTwo == forOne && primeCheck == 0)
+			{
+				fprintf(stdout, "%d ", forOne);
+				primeCount++;
+				break;
+			}
+			
 			if (forOne % forTwo == 0)
 			{
 				primeCheck++;
 			}
-			//if the prime check is 0, that means no numbers divided evenly into the value being tested in the first loop
-			if (forTwo == forOne - 1 && primeCheck == 0)
-			{
-				fprintf(stdout, "%d ", forOne);
-				//add a tick to the count of primes, this lets you stop at "quanCheck" prime numbers printed
-				primeCount++;
-			}
+			
 		}
+		
 		// if you have printed "quanCheck" prime numbers, the loop ends
 		if (primeCount == quanCheck)
 		{
