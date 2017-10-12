@@ -4,8 +4,8 @@
 #
 #
 cd ~/src/unix/projects
-mkdir pbx3.t
-cd pbx3.t
+mkdir pbx3
+cd pbx3
 cp /var/public/unix/pbx3/ccattell/pbx3.csv pbx3.csv
 cp pbx3.csv pbx3.gz
 gunzip -d pbx3.gz
