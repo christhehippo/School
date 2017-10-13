@@ -15,8 +15,8 @@
 int main()
 {
 	//Initial Variables
-	unsigned int input, digitLoop;
-	unsigned char digitCount, isoFill, initialSpace, isoPrint;
+	unsigned int input, digitLoop = 0;
+	unsigned char digitCount, isoFill, initialSpace, isoPrint = 0;
 
 	fprintf(stderr, "Enter value: "); 	  //Obtain user input
 	fscanf(stdin, "%u", &input);
@@ -49,11 +49,11 @@ int main()
 	
 ////////////////////////////////////////////////////////////////
 //					Breaks here
-//
-//	for (isoPrint = 1; isoPrint < 3; isoPrint++)
-//	{
-//		fprintf(stdout, "%hhu", isoInput[isoPrint]);
-//	}
+
+	for (isoPrint = 1; isoPrint < 3; isoPrint++)
+	{
+		fprintf(stdout, "%hhu", isoInput[isoPrint]);
+	}
 ///////////////////////////////////////////////////////////////	
 	
 	
