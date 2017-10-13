@@ -20,6 +20,7 @@ int main()
 
 	fprintf(stderr, "Enter value: "); 	  //Obtain user input
 	fscanf(stdin, "%u", &input);
+
 	digitLoop = input;					  //Getting number of input digits
 	for (digitLoop = input; digitLoop > 0; digitLoop = digitLoop / 10)  //This is used for input array size
 	{
@@ -50,7 +51,9 @@ int main()
 //		fprintf(stdout, "%hhu", isoInput[isoPrint]);
 //	}
 ///////////////////////////////////////////////////////////////	
-	fprintf(stdout, "\n");	
+	
+	
+	fprintf(stdout, " x 11 =\n");	
 	
 	
 
