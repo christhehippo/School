@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+#
+
+startingValue=0
+endingValue=0
+displaySigned=0
+
+if [ $1 -z ]
+then
+	let startingValue=0
+else
+	let startingValue="$1"
+fi
+
+if [ $2 -z ]
+then
+	let endingValue="15"
+else
+	let endingValue="$2"
+fi
+
+if [ $3 -z ]
+then
+	let displaySigned="0"
+else
+	let displaySigned="1"
+fi
+
+printf "  base 2  |  base 8  |  base10  |"
+if [ $displaySigned -gt 0 ]
+then
+	printf "  signed  |"
+fi
+printf "  base16\n"
