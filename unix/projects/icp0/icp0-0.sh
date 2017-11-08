@@ -12,9 +12,9 @@ xwit -move 250 400
 ## Mouse move command
 xte "mousemove 250 400"
 xte "sleep 0.5"
-xte "mousemove 250 400"
+xte "mousemove 200 400"
 xte "sleep 0.5"
-xte "mousemove 250 400"
+xte "mousemove 160 420"
 xte "sleep 0.5"
 xte "mousemove 250 400"
 xte "sleep 0.5"
