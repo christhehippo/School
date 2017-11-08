@@ -9,8 +9,8 @@ typedef unsigned short int usi;
 class tape : public storage
 {
 	public:
-		tape() : tape(0, 0);
-		tace(uc) : tape(uc, 0);			 // format tape
+		tape();
+		tape(uc);
 		tape(uc, uc);		 // format tape and set location
 		void forward();		 // advance 1 byte
 		void forward(uc);	 // advance X bytes

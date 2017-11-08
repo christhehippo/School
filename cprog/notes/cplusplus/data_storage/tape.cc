@@ -1,35 +1,17 @@
 #include "tape.h"
 
-/*
-tape :: tape() : tape(0, 0)
-{
-//	position = ret();
-}
-
-tape :: tape(uc byte) : tape(byte, 0)
-{
-//	int index = 0
-//	for (index = ret(); index < 256; index++)
-//	{
-//		position = index;
-//		set(index);
-//		put(byte);
-//	}
-//	postition = 0;
-//	set(position); 
-}
-*/
-
+tape :: tape() : tape(0, 0) { }
+tape :: tape(uc byte) : tape(byte, 0) { }
 tape :: tape(uc byte, uc position) : storage()
 {
-	int index = 0
+	int index = 0;
 	for (index = ret(); index < 256; index++)
 	{
 		this -> position = index;
 		set(index);
 		put(byte);
 	}
-	this -> postition = position;
+	this -> position = position;
 	set(position);
 }
 
