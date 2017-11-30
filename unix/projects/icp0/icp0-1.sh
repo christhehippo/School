@@ -17,7 +17,7 @@ xte 'sleep 0.25'
 xte 'mouseclick 1'
 
 ## Place window info in a text file
-xwininfo -name pod21 > xwininfo.txt
+##xwininfo -name pod21 > xwininfo.txt
 xte 'sleep 0.5'
 xte 'mouseclick 1'
 xte 'sleep 0.5'

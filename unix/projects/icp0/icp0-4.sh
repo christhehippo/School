@@ -515,5 +515,96 @@ done
 
 xte 'sleep 0.1'
 xte 'mouseup 1'
+xte 'sleep 0.2'
+## Fill arm 1
+xwit -root -warp 1290 100
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+xwit -root -warp 1520 720
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+xwit -root -warp 1480 720
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+xwit -root -warp 1230 100
+xte 'sleep 0.2' 
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+xwit -root -warp 1680 710
+xte 'sleep 0.2' 
+xte 'mousedown 1'
 
+ARM2A=1680
+xte 'mousedown 1'
+## First loop for left arm
+while [ $ARM2A -le 1800 ]
+do
+	xwit -root -warp ${ARM2A} 710
+	ARM2A=$(($ARM2A+2))
+done
+
+ARM2B=710
+## Next loop for left arm
+while [ $ARM2B -le 750 ]
+do
+	xwit -root -warp 1800 ${ARM2B}
+	ARM2B=$(($ARM2B+1))
+done
+
+ARM2C=1800
+## Third loop for left arm
+while [ $ARM2C -ge 1680 ]
+do
+	xwit -root -warp ${ARM2C} 750
+	ARM2C=$(($ARM2C-2))
+done
+
+ARM2D=750
+## Next loop for left arm
+while [ $ARM2D -ge 710 ]
+do
+	xwit -root -warp 1680 ${ARM2D}
+	ARM2D=$(($ARM2D-1))
+done
+xte 'mouseup 1'
+
+## Fill arm 2
+xwit -root -warp 1290 100
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+xwit -root -warp 1700 720
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+xwit -root -warp 1750 720
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.2'
+
+## Type wow 
+xwit -root -warp 1550 100
+xte 'sleep 0.2'
+xte 'mouseclick 1'
+xte 'sleep 0.5'
+
+xte 'key w'
+xte 'key o'
+xte 'key w'
+xte 'sleep 0.2'
+xwit -root -warp 1650 850
+xte 'sleep 0.1'
+xte 'mouseclick 1'
+## Move it 
+xte 'sleep 0.1'
+xwit -root -warp 1620 600
+xte 'sleep 0.1'
+xte 'mousedown 1'
+xte 'sleep 0.1'
+xwit -root -warp 1800 400
+xte 'sleep 0.1'
+xte 'mouseup 1'
 

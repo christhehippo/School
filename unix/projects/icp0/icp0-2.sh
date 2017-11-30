@@ -1,4 +1,4 @@
-## icp0-1.sh | Christian Cattell | CSCS1730 ##
+## icp0-2.sh | Christian Cattell | CSCS1730 ##
 ##############################################
 #
 #!/bin/bash
@@ -12,7 +12,7 @@ xte 'sleep 2'
 ## Move mtpaint window to right moniter
 	## Isolate mtpaint window id
 xwit -print -all > xwit_info.txt
-grep mtPaint 3.40 xwit_info.txt | sed 's/ /:/g' | cut -d : -f2 > mtPaint_id.txt
+grep 'mtPaint 3.40' xwit_info.txt | sed 's/ /:/g' | cut -d : -f1 > mtPaint_id.txt
 	## Now move
 MTPAINT=$(cat mtPaint_id.txt)
 xwit -id $MTPAINT -move 1200 0	
@@ -22,6 +22,8 @@ xwit -root -warp 1230 100
 xte 'mouseclick 1'
 xte 'sleep 0.5'
 
+## Each shape has a loop for each side, so total 8 loops
+## Lack of comments there because they are basically the same
 ## Start first square - red
 xwit -root -warp 1400 350
 xte 'mousedown 1'
