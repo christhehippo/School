@@ -13,8 +13,7 @@ int main()
 	start.setStartingVal(parent.getStartingVal());
 	start.getStartingType();
 	end.getEndingType();
-//	fprintf(stdout, "%f\n", start.baseNum());
-	fprintf(stdout, "%.0f ", start.retStartingVal());
+	fprintf(stdout, "\n%.0f ", start.retStartingVal());
 	start.printUnits();
 	fprintf(stdout, "%.4f ", end.finalNum(start.baseNum(), start.byteOrBit()));
 	end.printUnits();
