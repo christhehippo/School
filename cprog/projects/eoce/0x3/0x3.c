@@ -1,4 +1,4 @@
-// eoce 0x3 compile gcc --std=c99 -Wall -o 0x3 0x3.c -lgd
+// eoce 0x3 compile gcc --std=c99 -Wall -o 0x3 0x3.c -lgd -lm
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,13 +23,14 @@ int main()
 	char *outfile = NULL;   // Name of output file
 	FILE *out     = NULL;   // Pointer to output file
 	gdImagePtr img;         // GD Image Construct
-	unsigned int color[3]; // Colors
+	unsigned int color[3];  // Colors
 	
 	int width = 1920, height = 1010;
 
 	// Allocate for outfile, then write to outfile
 	outfile = (char *) malloc (sizeof (char) * 64);
-	fprintf(stderr, "Using '0x3.png' as output filename\n");
+	fprintf(stderr, "\nUsing '0x3.png' as output filename\n");
+	fprintf(stderr, "\nVIEW AT: https://lab46.g7n.org/~ccattell/0x3.png\n\n");
 	sprintf(outfile, "/home/%s/public_html/0x3.png", getenv("USER"));
 	
 	// Create base image
@@ -46,15 +47,15 @@ int main()
 	// Make red stripes
 	char stripeLoop = 0;
 	for (stripeLoop = 0; stripeLoop < 8; stripeLoop++)
-		stripe(stripeLoop, width, img, &color[3]);
+		stripe(stripeLoop, width, img, &color[0]);
 
 	// Make blue sqaure piece
 	gdImageFilledRectangle(img, 0, 0, width/3, height/2, color[BLUE]);
 
 	// Make stars
-	char starLoop = 0;
-	for (starLoop = 0; starLoop < 14; starLoop++)
-		star(width, height, starLoop*26, img, &color[0]); // *26 because 360/13 = about 28
+	char starLoop = 1;
+	for (starLoop = 1; starLoop < 14; starLoop++)
+		star(width, height, starLoop*28, img, &color[0]); // *28 because 360/13 = about 28
 
 	//Closing stuff
 	out = fopen(outfile, "wb");
@@ -99,7 +100,7 @@ void star(int width, int height, float degree, gdImagePtr img, unsigned int *col
 	gdImageLine(img, x-24, y-8, x+24, y-8, color[WHITE]);
 	gdImageLine(img, x+24, y-8, x-12, y+24, color[WHITE]);
 
-	// Fill in start
+	// Fill in star
 	gdImageFillToBorder(img, x, y, color[WHITE], color[WHITE]);
 	gdImageFillToBorder(img, x, y-12, color[WHITE], color[WHITE]);
 	gdImageFillToBorder(img, x-12, y, color[WHITE], color[WHITE]);
