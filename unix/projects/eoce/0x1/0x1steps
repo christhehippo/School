@@ -1,0 +1,52 @@
+#### 0x1steps ####
+#
+#!/bin/bash
+#
+
+## SO it says I cant use any external tools
+## so I just made a c script that has a variable set to 0x1ced3
+## and then just fprintf'd it to figure out the decimal value..
+## the value is 118483. This feels cheap to me but hey the directions 
+## dont say I cant do that. C file is called hextodec.c
+
+## I also just put another octal variable in there too, its 88
+
+## dd is not an easy to figure out tool
+
+
+
+dd if=memdump.ram of=test0 ibs=1 skip=118483 count=80
+
+## put new values into my c file I initially used to convert
+## part1: 0x13ca0 = 81056   110350 = 37096
+## part2: 0x1800  = 6144    204240 = 67744
+## part3: 0x1e188 = 123272  104440 = 35104
+
+dd if=memdump.ram of=part1.xz bs=1 skip=81056 count=37096
+dd if=memdump.ram of=part2uu bs=1 skip=6144 count=67744
+dd if=memdump.ram of=test3 bs=1 skip=123272 count=35104
+
+## decode part1/2
+uudecode part2uu
+unxz part1.xz
+
+## place it all into a single file
+cat part2 >> part1
+cat part3 >> part1
+
+cp part1 part1.rle
+
+## convert from rle to pnm
+rletopnm --verbose part1.rle >stage2.pnm
+
+## resize image to 414x418
+pnmscale -xysize 414 418 stage2.pnm > meme0531.pnm
+
+## convert back to png
+pnmtopng meme0531.pnm > meme0531.png
+
+
+
+
+
+

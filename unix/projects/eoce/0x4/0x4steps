@@ -1,0 +1,30 @@
+# compile sprite
+gcc -o sprite sprite.c -lgd
+
+# get my id
+id ccattell
+# uid=6060
+
+## made a six out of a 16x16 grid of 0s and 1s
+
+## change the fopen to six.dat
+./sprite ~/public_html/unix-eoce/unix0x4digit1
+./sprite ~/public_html/unix-eoce/unix0x4digit3
+## change the fopen to zero.dat
+./sprite ~/public_html/unix-eoce/unix0x4digit2
+./sprite ~/public_html/unix-eoce/unix0x4digit4
+
+## make third digit blue
+convert unix0x4digit3.png -fuzz 50% -fill "2A33A1" -opaque "#FFFFFF" test.png
+mv test.png unix0x4digit3.png 
+
+## merge the pngs
+convert +append *.png out.png
+
+## resize it
+convert out.png -resize 800x600 newout.png
+
+## copy directory to 0x4 directory
+cp -r unix-eoce ~/src/unix/projects/eoce/0x4/
+
+## thats about it

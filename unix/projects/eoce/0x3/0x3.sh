@@ -4,8 +4,7 @@
 #
 
 
-
-if [ "$1" = "" ]
+if [ "${1}" = "" ]
 then
 
 
@@ -21,25 +20,58 @@ then
 	grep 'The Moon will be Full' moon.txt | head -1 > fullmoon0.txt
 	awk '{print "The next full moon will be on " $1 " " $3 " " $4 " " $2 " at " $5 "."}' fullmoon0.txt > fullmoon1.txt
 	## Read next full moon
+	mooncheck=$(cat fullmoon1.txt)
 	cat fullmoon1.txt 
+	## check if there even is a full moon this month, if not go to next
+	if [ "$mooncheck" = "" ] 
+	then
+		## get year and month
+		year=$(date -I | cut -d "-" -f1)
+		month=$(date -I | cut -d "-" -f2)
+		## make sure we arent going to a new year
+		month=$(($month+1))
+		if [ $month = 13 ]
+		then
+			month=1
+			year=$(($year+1))
+		fi
+		if [ $month -lt 10 ]
+		then
+			month=$(echo "0$month")
+		fi
+		
+		for day in {01..31};
+		do 	
+			for hour in {00..23};
+			do
+				TZ=EST pom $year$month$day$hour >> moon.txt
+			done
+		done
+	
+		## Next full moon will be put in this file
+		grep 'The Moon will be Full' moon.txt | head -1 > fullmoon0.txt
+		awk '{print "The next full moon will be on " $1 " " $3 " " $4 " " $2 " at " $5 "."}' fullmoon0.txt > fullmoon1.txt
+		## Read next full moon
+		cat fullmoon1.txt 
+	fi
 fi
 
 ## year given
-if [ "$1" != "" ]
+if [ "${1}" != "" ]
 then
 	year="$1"
-	## Fix if year is enter as 4 digits
-	if [ $year -gt 100 ]
-	then
-		yearmath=$((year/100))
-		yearmath=$((yearmath*100))
-		year=$(($year-$yearmath))
+##	## Fix if year is enter as 4 digits
+##	if [ $year -gt 100 ]
+##	then
+##		yearmath=$((year/100))
+##		yearmath=$((yearmath*100))
+##		year=$(($year-$yearmath))
 		## Adjusts years < 10 to 0X
-		if [ $year -lt 10 ]
-		then
-			year=$(echo "0$year")
-		fi
-	fi
+##		if [ $year -lt 10 ]
+##		then
+##			year=$(echo "0$year")
+##		fi
+##	fi
 	
 	for month in {01..12}
 	do

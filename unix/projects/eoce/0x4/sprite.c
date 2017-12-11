@@ -68,9 +68,9 @@ int main(int argc, char **argv)
     color[DARKGREEN] = gdImageColorAllocate(img, 0x33, 0x6B, 0x00);  
     color[RED]       = gdImageColorAllocate(img, 0xFF, 0x00, 0x00);  
     color[GRAY]      = gdImageColorAllocate(img, 0xCC, 0xCC, 0xCC);  
-    color[WHITE]     = gdImageColorAllocate(img, 0xFF, 0xFF, 0xFF);
+    color[WHITE]     = gdImageColorAllocate(img, 0x00, 0x00, 0xFF);
 
-	if ((in = fopen("sprite.dat", "r")) == NULL)
+	if ((in = fopen("six.dat", "r")) == NULL)
 	{
 		fprintf(stderr, "Error opening 'sprite.dat'\n");
 		exit(1);
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 		{
 			i = (x * (wide / 16));
 			j = (y * (high / 16));
-			gdImageFilledRectangle(img, i, j, (i+(wide/16)-2), (j+(high/16)-2), color[(sprite[x][y])]);
+			gdImageFilledRectangle(img, i, j, (i+(wide/16)-2), (j+(high/16)-2), color[sprite[x][y]]);
 		}
 	}
 

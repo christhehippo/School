@@ -110,6 +110,7 @@ float end :: finalNum(float bits,  char bob)
 			return(giga(bits, 0));
 		}
 	}
+	
 	if (endingTypeAr[0] == 84)
 	{
 		if (endingTypeAr[1] == 105)
