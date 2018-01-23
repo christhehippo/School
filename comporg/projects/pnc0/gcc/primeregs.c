@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////
-//			  		   primeregbs.c						 //
+//			  		   primeregs.c						 //
 //              		comporg							 //
 //        		 	Christian Cattell					 //
-//compile: gcc -std=c99 -Wall -lm -o primereg primereg.c //
+// compile: gcc -std=c99 -Wall -lm -o primereg primereg.c//
 ///////////////////////////////////////////////////////////
 
 #include <stdio.h>
@@ -45,7 +45,6 @@ int main (int argc, char **argv)
 			if (remainder == 0)
 			{
 				primeCheck++;
-				break;
 			}
 		}
 
@@ -74,7 +73,7 @@ int main (int argc, char **argv)
 
 //////////////////////////////////////////////////////////
 // 	Objective:
-//		Calculating prime numbers, breaking on finding prime
-//		only checking up to sqrt of number
+//    Calculating prime numbers using sqrt function in 
+//    math lib.
 //////////////////////////////////////////////////////////
 

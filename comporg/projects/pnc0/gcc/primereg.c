@@ -1,14 +1,13 @@
 ///////////////////////////////////////////////////////////
-//			  		   primeregbs.c						 //
+//			  		   primereg.c						 //
 //              		comporg							 //
 //        		 	Christian Cattell					 //
-//compile: gcc -std=c99 -Wall -lm -o primereg primereg.c //
+//  compile: gcc -std=c99 -Wall -o primereg primereg.c   //
 ///////////////////////////////////////////////////////////
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <math.h>
 
 int main (int argc, char **argv)
 {
@@ -28,7 +27,6 @@ int main (int argc, char **argv)
 	int remainder  = 0;		
 	int primeCount = 1;		 // counter for ending loopA
 	int primeCheck = 0;
-	int    root    = 0;
 ////////////////////////////////////////////////////
 
 
@@ -38,14 +36,12 @@ int main (int argc, char **argv)
 	
 	for (testNum = 3; primeCount <= input; testNum++)
 	{
-		root = sqrt(testNum);
-		for (divisor = 2; divisor <= root; divisor++)
+		for (divisor = 2; divisor < testNum; divisor++)
 		{
 			remainder = testNum % divisor;
 			if (remainder == 0)
 			{
 				primeCheck++;
-				break;
 			}
 		}
 
@@ -74,7 +70,7 @@ int main (int argc, char **argv)
 
 //////////////////////////////////////////////////////////
 // 	Objective:
-//		Calculating prime numbers, breaking on finding prime
-//		only checking up to sqrt of number
+// Determining prime numbers through brute force approach
+// with no optimizations.			  
 //////////////////////////////////////////////////////////
 

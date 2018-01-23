@@ -1,15 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ioctl.h>
 
-#define  PAGELEN 24
 #define  LINELEN 512
 
 void     do_more(FILE *);
 //int      see_more();
+struct   winsize w;
+int 	 PAGELEN;
 
 int main (int argc, char **argv)
 {
-	FILE *fp  = NULL;
+	FILE	 *fp  	   = NULL;
+
+	ioctl (0, TIOCGWINSZ, &w);
+	PAGELEN			   = w.ws_row - 1;
+
 
 	if (argc == 1)
 	{

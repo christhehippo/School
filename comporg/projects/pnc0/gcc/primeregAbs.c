@@ -24,24 +24,25 @@ int main (int argc, char **argv)
 ///////////////Variables////////////////////////////		
 	int input  	   = atoi(argv[1]); // user input
 	int testNum    = 3;      // value to test
-	int divisor    = 2;		 // divisor for p checking
 	int remainder  = 0;		
 	int primeCount = 1;		 // counter for ending loopA
 	int primeCheck = 0;
 	int    root    = 0;
+	int primes[input];
+	primes[0]      = 2;
+	int arrLoop    = 0;
 ////////////////////////////////////////////////////
 
 
 //////////////Find primes///////////////////////////
 
-	fprintf(stderr, "2 "); // skipping 2
 	
 	for (testNum = 3; primeCount <= input; testNum++)
 	{
 		root = sqrt(testNum);
-		for (divisor = 2; divisor <= root; divisor++)
+		for (arrLoop = 0; primes[arrLoop] <= root; arrLoop++)
 		{
-			remainder = testNum % divisor;
+			remainder = testNum % primes[arrLoop];
 			if (remainder == 0)
 			{
 				primeCheck++;
@@ -51,12 +52,16 @@ int main (int argc, char **argv)
 
 		if (primeCheck == 0)
 		{
-			fprintf(stderr, "%d ", testNum);
+			primes[primeCount] = testNum;
 			primeCount++;
 		}
 		primeCheck = 0;		
 	}
-	
+
+	for (arrLoop = 0; arrLoop < input; arrLoop++)
+	{
+		fprintf(stderr, "%d ", primes[arrLoop]);
+	}
 	fprintf(stderr, "\n"); // new line
 ////////////////////////////////////////////////////	
 
