@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////
-//			  		   primeregbs.c						 //
+//			  		   primeregs.c						 //
 //              		comporg							 //
 //        		 	Christian Cattell					 //
-//compile: gcc -std=c99 -Wall -lm -o primereg primereg.c //
+// compile: gcc -std=c99 -Wall -lm -o primereg primereg.c//
 ///////////////////////////////////////////////////////////
 
 #include <stdio.h>
@@ -24,44 +24,38 @@ int main (int argc, char **argv)
 ///////////////Variables////////////////////////////		
 	int input  	   = atoi(argv[1]); // user input
 	int testNum    = 3;      // value to test
+	int divisor    = 2;		 // divisor for p checking
 	int remainder  = 0;		
 	int primeCount = 1;		 // counter for ending loopA
 	int primeCheck = 0;
 	int    root    = 0;
-	int primes[input];
-	primes[0]      = 2;
-	int arrLoop    = 0;
 ////////////////////////////////////////////////////
 
 
 //////////////Find primes///////////////////////////
 
+	fprintf(stderr, "2 "); // skipping 2
 	
 	for (testNum = 3; primeCount <= input; testNum++)
 	{
 		root = sqrt(testNum);
-		for (arrLoop = 0; primes[arrLoop] <= root; arrLoop++)
+		for (divisor = 2; divisor <= root; divisor++)
 		{
-			remainder = testNum % primes[arrLoop];
+			remainder = testNum % divisor;
 			if (remainder == 0)
 			{
 				primeCheck++;
-				break;
 			}
 		}
 
 		if (primeCheck == 0)
 		{
-			primes[primeCount] = testNum;
+			fprintf(stderr, "%d ", testNum);
 			primeCount++;
 		}
 		primeCheck = 0;		
 	}
-
-	for (arrLoop = 0; arrLoop < input; arrLoop++)
-	{
-		fprintf(stderr, "%d ", primes[arrLoop]);
-	}
+	
 	fprintf(stderr, "\n"); // new line
 ////////////////////////////////////////////////////	
 
@@ -79,8 +73,7 @@ int main (int argc, char **argv)
 
 //////////////////////////////////////////////////////////
 // 	Objective:
-//		Calculating prime numbers, breaking on finding prime
-//		only checking up to sqrt of number,
-//      AND only testing previously found prime numbers
+//    Calculating prime numbers using sqrt function in 
+//    math lib.
 //////////////////////////////////////////////////////////
 
