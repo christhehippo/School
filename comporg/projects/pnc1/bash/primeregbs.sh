@@ -7,7 +7,7 @@ input="$1"           ## Get number of primes
 primeCount=2
 testNum=4
 
-printf "2 3 "
+printf "2 3 " 1>&2
 
 while [ $primeCount -lt $input ]
 do
@@ -26,8 +26,8 @@ do
 		done
 
 	if [ "$remainder" != 0 ]
-	then
-		printf "%d " "$testNum"	
+	then 
+		printf "%d " "$testNum"	1>&2
 		primeCount=$((primeCount+1))
 	fi
 	

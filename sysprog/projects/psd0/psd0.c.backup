@@ -1,10 +1,3 @@
-////////////////////////////////////////
-//       psd0
-// Christian Cattell
-// compile: gcc -o psd0 psd0.c -Wall -std=c99
-//   Yes I know I could have made more functions to save typing,
-//   2d arrays are weird though.
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -49,6 +42,14 @@ int main (int argc, char **argv)
 		
 	}
 
+	for (y = 0; y < lineCount; y++)
+	{
+		for (x = 1; x < 11; x++)
+		{
+			printf("%c", dates[y][x]);
+		}
+		printf("\n");
+	}
 ///////Open/////////////////////////////////////////////////////
 
 	char open[lineCount][6]; // open horizontal, vertical is for align
@@ -76,6 +77,14 @@ int main (int argc, char **argv)
 		filePos = fgetc(fp);
 	}
 
+	for (y = 0; y < lineCount; y++)
+	{
+		for (x = 0; x < 6; x++)
+		{
+			printf("%c", open[y][x]);
+		}
+		printf("\n");
+	}
 ///////High/////////////////////////////////////////////////////
 
 	char high[lineCount][6]; // open horizontal, vertical is for align
@@ -101,7 +110,15 @@ int main (int argc, char **argv)
 		goToComma(2, fp);
 		filePos = fgetc(fp);
 	}
-
+	printf("\n");
+	for (y = 0; y < lineCount; y++)
+	{
+		for (x = 0; x < 6; x++)
+		{
+			printf("%c", high[y][x]);
+		}
+		printf("\n");
+	}
 ////////////Low/////////////////////////////////////////////////////	
 	char low[lineCount][6]; // open horizontal, vertical is for align
 	x = 0; // These refer to 2d array axii
@@ -126,7 +143,15 @@ int main (int argc, char **argv)
 		goToComma(3, fp);
 		filePos = fgetc(fp);
 	}
-
+	printf("\n");
+	for (y = 0; y < lineCount; y++)
+	{
+		for (x = 0; x < 6; x++)
+		{
+			printf("%c", low[y][x]);
+		}
+		printf("\n");
+	}
 //////////////Close////////////////////////////////////////////////
 	char close[lineCount][6]; // open horizontal, vertical is for align
 	x = 0; // These refer to 2d array axii
@@ -151,7 +176,15 @@ int main (int argc, char **argv)
 		goToComma(4, fp);
 		filePos = fgetc(fp);
 	}
-
+	printf("\n");
+	for (y = 0; y < lineCount; y++)
+	{
+		for (x = 0; x < 6; x++)
+		{
+			printf("%c", close[y][x]);
+		}
+		printf("\n");
+	}
 ///////////////////////////////////Adjusted cl/////////////////////
 char adj[lineCount][6]; // open horizontal, vertical is for align
 	x = 0; // These refer to 2d array axii
@@ -176,7 +209,15 @@ char adj[lineCount][6]; // open horizontal, vertical is for align
 		goToComma(5, fp);
 		filePos = fgetc(fp);
 	}
-
+	printf("\n");
+	for (y = 0; y < lineCount; y++)
+	{
+		for (x = 0; x < 6; x++)
+		{
+			printf("%c", adj[y][x]);
+		}
+		printf("\n");
+	}
 ////////////////////////Vol/////////////////////////////////
 char vol[lineCount][7]; // open horizontal, vertical is for align
 	x = 0; // These refer to 2d array axii
@@ -192,7 +233,7 @@ char vol[lineCount][7]; // open horizontal, vertical is for align
 			vol[y][x] = filePos;
 			if (vol[y][x] == EOF || vol[y][x] == 10)
 			{
-				vol[y][x] = 9;
+				vol[y][x] = 0;
 			}
 			filePos = fgetc(fp);   
 		}
@@ -201,60 +242,15 @@ char vol[lineCount][7]; // open horizontal, vertical is for align
 		goToComma(6, fp);
 		filePos = fgetc(fp);
 	}
-
-////////////////////////////Printing///////////////////////
-	fprintf(stdout, "Date         Open     High     Low      Close    AdjCl    Volume\n");
-	fprintf(stdout, "-----------------------------------------------------------------\n");
-	int line = 0;
-	for (line = 0; line < lineCount; line++)
+	printf("\n");
+	for (y = 0; y < lineCount; y++)
 	{
-		// Date
-		for (x = 1; x < 11; x++)
-		{
-			fprintf(stdout, "%c", dates[line][x]);
-		}
-		fprintf(stdout, "   ");
-		// Open
-		for (x = 0; x < 6; x++)
-		{
-			fprintf(stdout, "%c", open[line][x]);
-		}
-		fprintf(stdout, "   ");
-		// High
-		for (x = 0; x < 6; x++)
-		{
-			fprintf(stdout, "%c", high[line][x]);
-		}
-		fprintf(stdout, "   ");
-		// Low
-		for (x = 0; x < 6; x++)
-		{
-			fprintf(stdout, "%c", low[line][x]);
-		}
-		fprintf(stdout, "   ");
-		// Close
-		for (x = 0; x < 6; x++)
-		{
-			fprintf(stdout, "%c", close[line][x]);
-		}
-
-		fprintf(stdout, "   ");
-		// Adj Close
-		for (x = 0; x < 6; x++)
-		{
-			fprintf(stdout, "%c", adj[line][x]);
-		}
-		fprintf(stdout, "   ");
 		for (x = 0; x < 7; x++)
 		{
-			fprintf(stdout, "%c", vol[line][x]);
+			printf("%c", vol[y][x]);
 		}
-
-
 		printf("\n");
 	}
-
-
 
 
 
