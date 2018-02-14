@@ -29,6 +29,7 @@ void version (char *);
 void decimal_to_binary_normal(char *string, char *delim, int digits, FILE *output);
 void hex_to_binary_normal (char *string, char *delim, int digits, FILE *output);
 
+////////////////Vars/////////////////////////////////////
 int main (int argc, char **argv)
 {
 	FILE *output  		= stdout;
@@ -50,7 +51,11 @@ int main (int argc, char **argv)
 	int hex_flag 		= YES;
 	char *delim 		= NULL;       
 	char string[250];	   			
-	
+	long convTok[250];
+	char space[2] = " ";
+	char *token;
+	int i				= 0;
+
 //	FILE *fp;
 
 	static struct option long_options[] = {
@@ -71,7 +76,7 @@ int main (int argc, char **argv)
 		{ "file",    required_argument, 0, 'f' },
 		{ 0,	     0,					0,  0  }
 	};
-
+/////////////////////////////////////////////////////////////////////////
 
 	while ((opt = getopt_long (argc, argv, "hVs:478nd:qvBODHf", long_options, &option_index)) != -1)
 	{	
@@ -84,10 +89,17 @@ int main (int argc, char **argv)
 				version (argv[0]);
 				exit (0);
 			case 's':
-				string_flag = YES;
+//				string_flag = YES;
 				strcpy(string, optarg);
-//				string = strdup(optarg);
-//				printf("%s", string);
+				
+				token = strtok(string, space);
+				while (token != NULL)
+				{
+					printf("%s\n", token);
+					token = strtok(NULL, space);
+				}
+				
+				
 				break;
 			case '4':
 				digits = 4;
@@ -141,14 +153,6 @@ int main (int argc, char **argv)
 /////////////////////////////////////////////////////		
 
 
-//	char se;
-
-//	int i = 0;
-//	while (string[i] != '\0')
-//	{	
-//		sep = strtok(string, delim); 
-//
-//	}
 
 
 
@@ -159,46 +163,6 @@ int main (int argc, char **argv)
 
 
 
-
-
-
-//	if (hex_flag == YES)
-//	{
-//		if (quiet_flag == YES)
-//		{
-//			output = stderr;
-			hex_to_binary_normal(string, delim, digits, output);
-/*		}
-		else if (verbose_flag == YES)
-		{
-			fprintf(stdout, "Printing %s as binary with %hhu digits and using '%s' as the delimeter.\n", string, digits, delim);
-			hex_to_binary_normal(string, delim, digits, output);
-		}
-		else
-		{
-			hex_to_binary_normal(string, delim, digits, output);
-		}
-	}
-	else if (decimal_flag == YES)
-	{
-		if (quiet_flag == YES)
-		{
-			output = stderr;
-			decimal_to_binary_normal(string, delim, digits, output);
-		}
-		else if (verbose_flag == YES)
-		{
-			fprintf(stdout, "Printing %s as binary with %hhu digits and using '%s' as the delimeter.\n", string, digits, delim);
-			decimal_to_binary_normal(string, delim, digits, output);
-		}
-		else
-		{
-			decimal_to_binary_normal(string, delim, digits, output);
-		}
-	}
-
-
-*/
 
 	return (0);
 }
