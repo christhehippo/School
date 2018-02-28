@@ -58,22 +58,14 @@ _start:
 
 	; itoa (convert integers back to ascii)
 	;
-	mov bl,  10
-	div bl
-	mov cl, ah  		; copy remainder into c register
-	and ax,  0x00FF 	; preserve just the quotient
-	add al,  0x30   	; ASCII-ify our integer value
+	call divandmod
 	mov [output+0], al  ; place it in our memory
 
 	add cl, 0x30		; ASCII-fy our remainder value
 	mov [output+1], cl  ; place it in our memory
 
 	mov rax, r8			; copy 25 into A register
-	mov bl,  10			; set up for division
-	div bl				; divide
-	mov cl,  ah			; save remainder (5)
-	and ax,  0x00FF		; mask it
-	add al,  0x30		; ASCII-ify the 2
+	call divandmod
 	mov [output+2], al  ; store it 
 
 	add cl,  0x30		; ASCII-ify 5
@@ -97,4 +89,10 @@ exit:
 	mov rdi, 0
 	syscall
 
-
+divandmod:
+	mov bl,  10			; place 10 into bl
+	div bl				; divide bl into al
+	mov cl,  ah			; copy remainder into c register
+	and ax,  0x00FF		; preserve just the quotient
+	add al,  0x30		; ASCII-ify our integer value
+	ret

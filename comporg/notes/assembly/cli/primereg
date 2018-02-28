@@ -1,0 +1,116 @@
+	.file	"primereg.c"
+	.text
+	.section	.rodata
+.LC0:
+	.string	"2 "
+.LC1:
+	.string	"%d "
+.LC3:
+	.string	"%8.4lf\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB5:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	subq	$80, %rsp
+	movl	%edi, -68(%rbp)
+	movq	%rsi, -80(%rbp)
+	leaq	-48(%rbp), %rax
+	movl	$0, %esi
+	movq	%rax, %rdi
+	call	gettimeofday@PLT
+	movq	-80(%rbp), %rax
+	addq	$8, %rax
+	movq	(%rax), %rax
+	movq	%rax, %rdi
+	call	atoi@PLT
+	movl	%eax, -20(%rbp)
+	movl	$3, -4(%rbp)
+	movl	$2, -8(%rbp)
+	movl	$0, -24(%rbp)
+	movl	$1, -12(%rbp)
+	movl	$0, -16(%rbp)
+	movq	stderr(%rip), %rax
+	movq	%rax, %rcx
+	movl	$2, %edx
+	movl	$1, %esi
+	leaq	.LC0(%rip), %rdi
+	call	fwrite@PLT
+	movl	$3, -4(%rbp)
+	jmp	.L2
+.L7:
+	movl	$2, -8(%rbp)
+	jmp	.L3
+.L5:
+	movl	-4(%rbp), %eax
+	cltd
+	idivl	-8(%rbp)
+	movl	%edx, -24(%rbp)
+	cmpl	$0, -24(%rbp)
+	jne	.L4
+	addl	$1, -16(%rbp)
+.L4:
+	addl	$1, -8(%rbp)
+.L3:
+	movl	-8(%rbp), %eax
+	cmpl	-4(%rbp), %eax
+	jl	.L5
+	cmpl	$0, -16(%rbp)
+	jne	.L6
+	movq	stderr(%rip), %rax
+	movl	-4(%rbp), %edx
+	leaq	.LC1(%rip), %rsi
+	movq	%rax, %rdi
+	movl	$0, %eax
+	call	fprintf@PLT
+	addl	$1, -12(%rbp)
+.L6:
+	movl	$0, -16(%rbp)
+	addl	$1, -4(%rbp)
+.L2:
+	movl	-12(%rbp), %eax
+	cmpl	-20(%rbp), %eax
+	jle	.L7
+	movq	stderr(%rip), %rax
+	movq	%rax, %rsi
+	movl	$10, %edi
+	call	fputc@PLT
+	leaq	-64(%rbp), %rax
+	movl	$0, %esi
+	movq	%rax, %rdi
+	call	gettimeofday@PLT
+	movq	-64(%rbp), %rdx
+	movq	-48(%rbp), %rax
+	subq	%rax, %rdx
+	movq	%rdx, %rax
+	cvtsi2sdq	%rax, %xmm1
+	movq	-56(%rbp), %rax
+	cvtsi2sdq	%rax, %xmm0
+	movsd	.LC2(%rip), %xmm2
+	divsd	%xmm2, %xmm0
+	addsd	%xmm1, %xmm0
+	movq	stdout(%rip), %rax
+	leaq	.LC3(%rip), %rsi
+	movq	%rax, %rdi
+	movl	$1, %eax
+	call	fprintf@PLT
+	movl	$0, %eax
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE5:
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC2:
+	.long	0
+	.long	1093567616
+	.ident	"GCC: (Debian 7.3.0-5) 7.3.0"
+	.section	.note.GNU-stack,"",@progbits

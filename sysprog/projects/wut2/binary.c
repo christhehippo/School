@@ -7,6 +7,7 @@
 ///   execute: binary -s "de ad be ef 00 01 5a"
 ///        or: echo "de ad be ef 00 01 5a" | binary
 
+//bin/bash/!
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,16 +32,15 @@ int main (int argc, char **argv)
 	int option_index    = 0;
 	int digits          = 8;
 	int verbose_flag 	= NO;
-	int quiet_flag		= NO;
 	int binary_flag		= NO;
 	int octal_flag 		= NO;
 	int decimal_flag	= NO;
 	int hex_flag 		= YES;
 	int str_flag        = NO;
-	char *delim 		= " ";       
+	char *delim 		= " ";
+	char *outDelim      = " ";
 	char string[250];	   			
 	long convTok[250];
-	char space[2] 		= " ";
 	char *token;
 	char *eptr			= "\0";
 	int i				= 0;
@@ -91,10 +91,12 @@ int main (int argc, char **argv)
 				digits = 8;
 				break;
 			case 'n':
-				delim = "";
+				delim = " ";
+				outDelim = "";
 				break;
 			case 'd':
 				delim = strdup(optarg);
+				outDelim = strdup(optarg);
 				break;
 			case 'q':
 				output = stderr;
@@ -137,16 +139,23 @@ int main (int argc, char **argv)
 	if (str_flag == NO) // Do some file stuff
 	{
 		FILE *fp = fopen(argv[argc-1], "r");
-//		if (fp == NULL) //  make sure we got the file 
-//		{
-//		fprintf(stdout, "Please put the file after the arguements.\n");
-//			return(1);
-//		}
-		while (fgets(string, sizeof(string), fp) != NULL)
+		if (fp != NULL) //  make sure we got the file 
 		{
-			// party
+			while (fgets(string, sizeof(string), fp) != NULL)
+			{
+				//party
+			}
+			fclose(fp);
 		}
-		fclose(fp);
+		if (fp == NULL)
+		{
+			fclose(fp);
+//			fprintf(stdout, "test\n");
+			while ((fscanf(stdin, "%c", &string[optind])) != 00)
+			{
+				// cry
+			}
+		}
 
 	}
 
@@ -162,84 +171,83 @@ int main (int argc, char **argv)
 			fprintf(output, "HEX INPUT: %s\n", string);
 		
 		fprintf(output, "USING BYTE SIZE: %d\n", digits);
-		fprintf(output, "USING DELIMETER: '%s'\n", delim);
+		fprintf(output, "USING DELIMETER: '%s'\n", outDelim);
 	}
-	
+
+////////////////Process data here into base 10//////////////////////
+
 	if (decimal_flag == YES)
 	{
 		// This all got really weird with the pointers but..	
-		token = strtok(string, space);
+		token = strtok(string, delim);
 		// token points to first seperated string piece
 		// Then set the converted token to a spot in the long int array using b 10
 		convTok[i] = strtol(token, &eptr, 10);
-		outputF(convTok[i], delim, digits, output);
+		outputF(convTok[i], outDelim, digits, output);
 		
 		while (1)
 		{	
 			// Repeat inside this loop
 			// Can't explain why I needed the first part outside the loop
 			// but I have an idea as to why
-			token = strtok(NULL, space);
+			token = strtok(NULL, delim);
 			
 			if (token == NULL)
 				break; // This fixed my seg fault issue 
 
 			convTok[i] = strtol(token, &eptr , 10); 
-			outputF(convTok[i], delim, digits, output);
+			outputF(convTok[i], outDelim, digits, output);
 			i++;									
 		}
 		fprintf(output, "\n");
 	}
 	else if (octal_flag == YES) // Same as decimal process, but base 8 in strtol
 	{
-		token = strtok(string, space);
+		token = strtok(string, delim);
 		convTok[i] = strtol(token, &eptr, 8);
-		outputF(convTok[i], delim, digits, output);
+		outputF(convTok[i], outDelim, digits, output);
 
 		while (1)
 		{	
-			token = strtok(NULL, space);
+			token = strtok(NULL, delim);
 			
 			if (token == NULL)
 				break;  
 
 			convTok[i] = strtol(token, &eptr , 8); 
-			outputF(convTok[i], delim, digits, output);
+			outputF(convTok[i], outDelim, digits, output);
 			i++;									
 		}
 		fprintf(output, "\n");
 	}
 	else if (hex_flag == YES)  // default case
 	{
-		token = strtok(string, space);
+		token = strtok(string, delim);
 		convTok[i] = strtol(token, &eptr, 16);
-		outputF(convTok[i], delim, digits, output);
+		outputF(convTok[i], outDelim, digits, output);
 		while (1)
 		{	
-			token = strtok(NULL, space);
+			token = strtok(NULL, delim);
 			
 			if (token == NULL)
 				break; 
  
 	 		convTok[i] = strtol(token, &eptr , 16); 
-			outputF(convTok[i], delim, digits, output);
+			outputF(convTok[i], outDelim, digits, output);
 			i++;									
 		}
 		fprintf(output, "\n");
 	}
 	else if (binary_flag == YES)
 	{
-		if (quiet_flag == YES) // just end on quiet flag
-			return (0);
-
-		token = strtok(string, space);
-		fprintf(output, "%s%s", token + strlen(token) - digits, delim);
+		token = strtok(string, delim);
+		fprintf(output, "%s%s", token + strlen(token) - digits, outDelim);
 		while (1)
 		{
-			token = strtok(NULL, space); // input is binary so return it with variable digits
+			token = strtok(NULL, delim); // input is binary so return it with variable digits
 			if (token == NULL)
 				break;
-			fprintf(output, "%s%s", token + strlen(token) - digits, delim);
+			fprintf(output, "%s%s", token + strlen(token) - digits, outDelim);
 		}
 		fprintf(output, "\n");
 	}
@@ -249,7 +257,7 @@ int main (int argc, char **argv)
 }
 
 void usage (char *name)
-{
+{ // long line of copy pasted text
 	fprintf(stdout, "\nbinary.c - program to display hex numbers in their\n           binary representation.\n\n  synopsis: binary [OPTION]... [FILE]...\n\n   execute: %s -s \"de ad be ef 00 01 5a\"\n        or: echo \"de ad be ef 00 01 5a\" | binary\n\n", name);
 	fprintf(stdout, "-h display usage information and exit\n-V display version information and exit\n-s \"STRING\" specify STRING as value to process\n-4 set nibble as processing unit/word size\n-7 set byte/word as 7-bits\n-8 set byte/word as 8-bits (default)\n-n no delimiter between processing units\n-d 'CHAR' use CHAR as delimiter between processing units (space is default)\n-q quiet, do not display anything to STDOUT\n-v verbose, display more information to STDOUT\n-B input data is to be considered as binary (basically a passthrough)\n-O input data is to be considered as octal\n-D input data is to be considered as decimal\n-H input data is to be considered as hexadecimal (default)\n\n");
 }
