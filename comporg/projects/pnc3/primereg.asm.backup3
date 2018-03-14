@@ -1,0 +1,142 @@
+section .data
+	oneD    db "  "
+	twoD    db "   "
+	threeD  db "    "
+	fourD	db "     "
+	fiveD	db "      "
+
+
+section .text
+global _start
+
+_start:
+					 ; Preserves: rsp rbp rbx r12 r13 r14 r15
+.time: 				 ; Initial setup
+	; Time stuff here
+	; 
+	
+.atoi:
+	; atoi stuff here:
+	pop rax			 ; Argc
+	pop rax			 ; Argv[0] - program name
+	pop rax			 ; Argv[1] - number of primes
+
+	mov r15, rax	 ; Move string to r15
+	mov r14, 0	     ; Put a 0 in r14, this will be digit count
+
+.initialvalues:
+	mov r12, 10		 ; Max number of primes
+	mov r13, 4		 ; r13 HOLDS THE TEST NUMBER 
+	mov r14, 2		 ; r14 HOLDS THE DIVISOR
+	mov r15, 2		 ; Prime count here
+.primecheck:	
+	mov rax, 0		 ; 0 things out
+	mov rdx, 0
+
+	mov rax, r13	 ; Move the test number to rax to be divided
+	div r14			 ; Divide rax by r14, quo goes to rax, remainder to rdx
+
+	mov r8, 0	     ; Temp value used for comparing stuff, volatile
+	cmp rdx, r8      ; Is the remainder greater than 0?
+	je .notprime	 ; When the remainder is 0, do this jump
+	
+	inc r14			 ; Not yet composite, up the divisor
+	cmp r13, r14	 ; See if the divisor is the same as the test num
+	je .print		 ; If it is, then the number is prime
+
+	jmp .primecheck  ; Go back through the process loop
+
+.notprime:
+	mov rax, 0
+	mov rdx, 0
+	inc r13			 ; New number, old one was not prime
+	mov r14, 2	     ; Reset the divisor
+	jmp .primecheck  ; Back to the start
+
+.print:				 ; Print things here
+
+	mov r8, 0
+	mov r8, 10		 ; Test to see how many digits we have
+	cmp r13, r8
+	jl .one
+	mov r8, 0
+	mov r8, 100
+	cmp r13, r8
+	jl .two
+	mov r8, 0
+	mov r8, 1000
+	cmp r13, r8
+	jl .three
+	mov r8, 0
+	mov r8, 10000
+	jl .four
+
+	jmp .five
+
+.one:
+	mov rax, 0		 ; Empty rax
+	mov rdx, 0
+	mov rax, r13	 ; Put test number in rax
+	add rax, 0x30 	 ; Make it an ascii number
+	mov [oneD+0], rax
+	mov rax, 0 			
+	mov rax, 0x20	 ; Put a space into the array
+	mov [oneD+1], rax 
+
+	mov rax, 1		 ; Print the contents of one
+	mov rdi, 1
+	mov rsi, oneD
+	mov rdx, 2 
+	syscall
+
+	mov rsi, 0
+	jmp .check	     ; See if we are done
+
+.two:
+	mov rax, 0		 ; Empty rax
+	mov rdx, 0
+	mov rax, r13	 ; Put the test number in rax
+	mov rbx, 0		 ; Empty out rbx
+	mov rbx, 10		 ; Put a ten in rbx
+	div rbx			 ; Divide rax by 10 or rbx
+	add rax, 0x30	 ; Make this an ascii char
+	add rdx, 0x30	 ; Also this becomes ascii
+	mov [twoD+0], rax
+	mov [twoD+1], rdx
+	mov r8, 0
+	mov r8, 0x20     ; Putting a space in r8 for the array
+	mov [twoD+2], r8
+
+	mov rax, 1		 ; Print the contents of twoD
+	mov rdi, 1
+	mov rsi, oneD
+	mov rdx, 3
+	syscall
+	
+	mov rsi, 0
+	jmp .check
+
+.three:
+	jmp  .check
+
+.four:
+
+	jmp .check
+	
+.five:
+	
+	jmp .check
+
+.check:
+	inc r13			 ; Test number upped
+	mov r14, 2		 ; Reset the divsior
+	inc r15			 ; Up the prime count
+	cmp r12, r15
+	jle .exit
+
+	jmp .primecheck  ; Back to the start
+
+.exit:
+	mov rax, 60 	 ; 60 - syscall exit
+	mov rdi, 0
+	syscall

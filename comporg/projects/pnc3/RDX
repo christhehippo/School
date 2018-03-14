@@ -1,0 +1,1 @@
+div %r10         // divide rax by the given register (r10), places quotient into rax and remainder into rdx (rdx must be zero before this instruction)

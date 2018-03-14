@@ -1,0 +1,86 @@
+section .data
+	pr db "     ", 0
+
+section .text
+	global _start
+
+_start:
+	mov rax, 0 	 	 ; Clear rax
+	pop rax    	 	 ; argc
+	pop rax	   	 	 ; Program name
+	pop rax   		 ; argument one 
+	mov r8, rax 	 ; Store number of primes in r8
+	mov r9,   4 	 ; Store value to be tested in r9
+	mov r10,  2 	 ; Store count of prime numbers in r10
+	mov r11,  2 	 ; Store divisor in r11
+
+.L0:				 ; Convert the input from a string to a number	
+					 ; Get the digit count
+	
+
+
+.L1:				 ; Divides test val by one divisor
+
+	mov rax,  0 	 ; Clear rax
+	mov rdx,  0 	 ; Clear rdx
+	mov rax, r9 	 ; Store test num in rax
+	div r11     	 ; Divide rax by divisor
+	            	 ; Quotient should be in rax, remainder in rdx
+	mov r12, rax 	 ; Store quo in r12
+	mov r13, rdx 	 ; Store remainder in r13
+				 	 ; Check if at test number - 1
+	mov rax, r9  	 ; Set rax to test number 
+	inc r11      	 ; Divisor +1
+	cmp rax, r11 	 ; Compare test num to divisor +1
+	je .L3       	 ; Print this number 
+
+	mov rax, 0   	 ; Set rax to 0
+	cmp rax, r13 	 ; Compare remainder to 0
+	je  .L2		 	 ; 0 test true
+	jne .L1      	 ; 0 test false
+
+.L2:             	 ; Go here when upping test number
+
+	inc r9		 	 ; Test number +1
+	mov r11, 2   	 ; Reset value stored in r11
+	jmp .L1		 	 ; New number to test
+
+.L3:   			 	 ; Go here to print a number
+			     	 ; Print r9
+
+	mov rax, rdx	 ; Previous remainder into rax
+	mov r14, 10		 ; Place 10 into r14
+	div r14			 ; Divide num by 1000
+	mov rbx, 0x30
+	add rbx
+					 ; Quotient in rax, remainder in rdx
+	mov r15, rax
+					 ; Move quotient to r15
+	mov rax, 0   	 ; Load 0 into rax
+	cmp rax, r15 	 ; Check if r15 is 0
+					 ; Skip if no 10 place
+	mov [pr+3], r15  ; 10 digit into array thing
+	mov [pr+4], rdx  ; Put the ones place into its place
+
+	mov rax, 1		
+	mov rdi, 1
+	mov rsi, pr
+	mov rdx, 5
+	syscall
+
+
+	inc r9 			 ; Test number +1
+	inc r10		 	 ; Prime count +1
+
+;.L4: 			 	; 
+
+	     
+		
+	
+	
+
+
+exit:
+	mov rax, 60 ; 60 - sysexit system call
+	mov rdi, 0
+	syscall
