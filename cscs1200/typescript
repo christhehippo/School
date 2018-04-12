@@ -1,0 +1,124 @@
+Script started on 2018-04-09 13:55:36-0400
+]0;lab46lab46:~/src/cscs1200$ cat paintLoop.cpp[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kgcc -[K[K[K[K[Kcat paintLoop.cpp
+#include <iostream>
+#include <stdio.h>
+
+using namespace std;
+
+const float gallonsPerSqFt = 120;
+
+int main ()
+{
+	float doorL	      = 0;
+	float doorW       = 0;
+	float doorSqFt    = 0;
+	
+	float windowL1    = 0;
+	float windowL2    = 0;
+	float windowW1    = 0;
+	float windowW2    = 0;
+	float windowSqFt1 = 0;
+	float windowSqFt2 = 0;
+
+	float bookL       = 0;
+	float bookW       = 0;
+	float bookSqFt    = 0;
+	
+	float roomL       = 0;
+	float roomW       = 0;
+	float roomH       = 0;
+	float roomSqFt    = 0;
+
+	float total       = 0;
+	int   rounded     = 0;
+	char  ch 		  = 'y';
+
+	// Store varaibles
+	do
+	{
+		cout << "Door length: ";
+		cin  >> doorL;
+		cout << "Door width: ";
+		cin  >> doorW;
+		doorSqFt = doorL * doorW;
+
+		cout << "Window 1 length: ";
+		cin  >> windowL1;
+		cout << "Window 1 width: ";
+		cin  >> windowW1;
+		windowSqFt1 = windowL1 * windowW1;
+
+		cout << "Window 2 length: ";
+		cin  >> windowL2;
+		cout << "Window 2 width: ";
+		cin  >> windowW2;
+		windowSqFt2 = windowL2 * windowW2;
+
+		cout << "Bookshelf length: ";
+		cin  >> bookL;
+		cout << "Bookshelf width: ";
+		cin  >> bookW;
+		bookSqFt = bookL * bookW;
+
+		cout << "Room length: ";
+		cin  >> roomL;
+		cout << "Room width: ";
+		cin  >> roomW;
+		cout << "Room height: ";
+		cin  >> roomH;
+		// Caclulate sq ft of all four walls
+		roomSqFt = ((roomW * roomH) * 2) + ((roomL * roomH) * 2);
+
+		// Subtract paint not needed for win, bookshelf, door
+		roomSqFt =  roomSqFt - doorSqFt;
+		roomSqFt =  roomSqFt - windowSqFt1;
+		roomSqFt =  roomSqFt - windowSqFt2;
+		roomSqFt =  roomSqFt - bookSqFt;
+
+		total = roomSqFt / gallonsPerSqFt;
+		rounded = int(total);
+		if (rounded < total)
+			rounded++;
+
+		// Total sq ft / 120 for 1 gallon per 120 sq ft
+		cout << "Gallons needed: " << rounded << endl;
+		
+		cout << "Continue(y/n): ";
+		cin  >> ch;	
+		
+	}while (ch == 'y');
+
+	return (0);
+}
+]0;lab46lab46:~/src/cscs1200$ g++ -o a[KpaintLoop paintLoop.cpp
+]0;lab46lab46:~/src/cscs1200$ ./paintLoop
+Door length: 6
+Door width: 3
+Window 1 length: 3
+Window 1 width: 2
+Window 2 length: 2
+Window 2 width: 2
+Bookshelf length: 4
+Bookshelf width: 3
+Room length: 10
+Room width: 10
+Room height: 8
+Gallons needed: 3
+Continue(y/n): y
+Door length: 1
+Door width: 2
+Window 1 length: 3
+Window 1 width: 4
+Window 2 length: 5
+Window 2 width: 6
+Bookshelf length: 7
+Bookshelf width: 8
+Room length: 9
+Room width: 10
+Room height: 11
+Gallons needed: 3
+Continue(y/n): 1 n
+]0;lab46lab46:~/src/cscs1200$ end[K[K[Kend
+exit
+
+Script done on 2018-04-09 13:58:38-0400

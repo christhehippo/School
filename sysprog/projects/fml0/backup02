@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/ioctl.h>
+#include <ncurses.h>
+
+int main()
+{
+	int	x      = 0;
+	int y	   = 0;
+	int index  = 0;
+	int jump   = 1;
+	char* guy  = "O";   
+  	long timer = 0;
+	
+	struct winsize window;		// ioctl terminal stuff
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);
+	int max_y = window.ws_row;	// assign row size
+	y 		  = max_y / 2;	
+	int max_x = window.ws_col;	// assign col size
+	x		  = max_x / 2;
+
+
+	initscr();					// start curses
+	noecho();					// disable echo
+	curs_set(FALSE);			// hide cursor 
+	cbreak();					// Disables the getchar() pause issue
+	nonl();
+
+	while (1)					// main loop
+	{
+		char ch = getch();
+		timeout(70);
+		if (ch == 'Q')
+		{
+			endwin();			// End game when Q
+			return (0);
+		}
+		if (ch == 32)
+		{
+			jump = 1;
+		}
+
+		refresh();
+		clear();
+	
+		mvprintw(y, x, guy);	// draw char 'ch'
+		refresh();				// refresh screen
+		usleep(70);			// delay
+		timer++;
+		if (jump > 0)
+		{
+			if (jump < 11)
+				y--;
+			else 
+			{
+				y++;
+				if (jump == 21)
+					jump = -1;
+			}
+
+			jump++;
+		}
+		else
+			y++;
+	}
+
+	endwin();					// restore terminal
+	return (0);
+}
+
+
+

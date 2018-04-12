@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/ioctl.h>
+#include <ncurses.h>
+
+int main()
+{
+	int	x     = 20;
+	int y	  = 0;
+	int index = 0;
+	char* guy = "O";   
+  
+	
+	struct winsize window;		// ioctl terminal stuff
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &window);
+	int max_y  = window.ws_row;	// assign row size
+	int max_x = window.ws_col;	// assign col size
+
+	initscr();					// start curses
+	noecho();					// disable echo
+	curs_set(FALSE);			// hide cursor 
+	cbreak();					// Disables the getchar() pause issue
+	nonl();
+
+	while (1)					// main loop
+	{
+		char ch = getch();
+		timeout(1000);
+		if (ch == 'a')			// get direction of move
+			x--;
+		if (ch == 'd')
+			x++;
+		if (ch == 'w')
+			y--;
+		if (ch == 's')
+			y++;
+		
+		refresh();
+
+		
+		
+		if (x > max_x - 1)		
+			x = max_x - 1;		// x y bounds
+		if (x < 0)
+			x = 0;
+		if (y > max_y - 1)
+			y = max_y - 1;
+		if (y < 0)
+			y = 0;
+		
+	
+
+		clear();
+		mvprintw(y, x, guy);	// draw char 'ch'
+		refresh();				// refresh screen
+		usleep(1000);			// delay
+	}
+
+	endwin();					// restore terminal
+	return (0);
+}
+
+
+
