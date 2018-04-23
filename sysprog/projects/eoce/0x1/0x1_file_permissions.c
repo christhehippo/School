@@ -1,3 +1,9 @@
+////////////////////////////////////////////////////
+//		0x1_file_permissions
+// program to show understanding of file permissions
+//    - pretty much just a chmod c program 
+//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
