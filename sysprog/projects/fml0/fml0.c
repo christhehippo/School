@@ -5,19 +5,23 @@
 #include <sys/ioctl.h>
 #include <ncurses.h>
 #include <time.h>
+#include <signal.h>
 
 #define UP 	  0
 #define DOWN  1
 #define LEFT  2
 #define RIGHT 3
-#define THING 48 
-#define FOOD  '+'
+#define THING 48
+#define HEAD  64
+#define FOOD  '$'
 
 
 void drawThing();
 void bounds();
 void end();
 void update();
+void startScreen();
+void drawScore(int score);
 
 int max_y;					
 int max_x;
@@ -58,6 +62,7 @@ int main()
 	noecho();					// no echoing
 	curs_set(FALSE);			// hide cursor
 	cbreak();					// no getchar pause
+	signal (SIGINT, SIG_IGN);	// ignore interupt signals
 
 
 	start_color();				// color function
@@ -70,14 +75,16 @@ int main()
 	init_pair (7, COLOR_WHITE, COLOR_BLACK);
 
 	
+	startScreen();
+
 	clear();	
-	
+	refresh();
 	while (1)
 	{
 		
 		// paint a picture
 		drawThing();
-
+		drawScore(score);
 		// direction control
 		ch = getch();
 		timeout(300);
@@ -130,20 +137,22 @@ int main()
 				usleep(500);
 			}
 		}
-///////////////////////////////////////////
+		else if (ch == 'Q')		// quit on shift+q
+			end();
+		
 
 		bounds();				// check if we lost
 	}
 
 	endwin();					// restore terminal
-	return (0);
+	return (1);					// should not reach this place
 }
 
 void bounds()
 {
 	int index = 0;
 
-	if (pos_x[0] == -1)
+	if (pos_x[0] == -1)			// check for wall colision
 		end();
 	if (pos_x[0] == (max_x + 1))
 		end();
@@ -160,11 +169,11 @@ void bounds()
 	}
 
 }
-void update()
+void update() // function to refresh the coordinates (direction update)
 {
 	int index = 0;
 
-	if (dir == UP)
+	if (dir == UP)					// update coords
 		y--;
 	if (dir == DOWN)
 		y++;
@@ -173,7 +182,7 @@ void update()
 	if (dir == RIGHT)
 		x++;
 	
-	if ((x == rand_x) && (y == rand_y))
+	if ((x == rand_x) && (y == rand_y))  // score check
 	{
 		score++;
 		rand_x = rand() % (max_x-1); // new food generate
@@ -185,12 +194,12 @@ void update()
 		pos_x[index] = pos_x[index-1]; // update body positions in array
 		pos_y[index] = pos_y[index-1];
 	}
-	pos_x[0] = x;
+	pos_x[0] = x; 				       // new head coords
 	pos_y[0] = y;
 
 }	
 
-void drawThing()
+void drawThing() // function to draw snake
 {
 	int index = 0;
 	int c	  = 1;
@@ -200,33 +209,57 @@ void drawThing()
 	attroff(COLOR_PAIR(5));
 	mvaddch(y, x, THING);
 	refresh();
-	for (index = 0; index <= score; index++)  // draw all elements of body arrays
+	attron(COLOR_PAIR(c));					  // unique char for head
+	mvaddch(pos_y[0], pos_x[0], HEAD);
+	attroff(COLOR_PAIR(c));
+	refresh();
+	c++;
+	for (index = 1; index <= score; index++)  // draw all elements of body arrays
 	{
 		attron(COLOR_PAIR(c));
-		
-		mvaddch(pos_y[index], pos_x[index], THING);
+		mvaddch(pos_y[index], pos_x[index], THING); // draw piece of body
 		refresh();
-
 		attroff(COLOR_PAIR(c));
 		c++;
-		if (c > 7)
+		if (c > 7) // color chooser
 			c = 1;
 	}
 	update();
 }
 
-void end()
+void end() // function to end program
 {
 	clear();
 	refresh();
-//	printf("x: %d  y: %d  max_x: %d  max_y: %d\n", x, y, max_x, max_y);
+	mvaddstr(max_y/2, (max_x/2)-4, "Game Over");
+	refresh();
+	usleep(50000);
 	getchar();
 	endwin();
 	exit(0);
 }
 
+void startScreen()
+{
+	clear();
+	refresh();
 
+	mvaddstr(max_y/2, (max_x/2)-3, "SNAKE");
+	refresh();
+	mvaddstr((max_y)+1, (max_x/2)-10, "PRESS ANY KEY TO START");
+	refresh();
+	usleep(50000);
+	getchar();
 
+}
+
+void drawScore(int score)
+{
+	mvaddstr(max_y-1, 0, "SCORE: ");
+	mvprintw(max_y-1, 9, "%d", score);
+	refresh();
+
+}
 
 
 
