@@ -37,7 +37,7 @@ int main (int argc, char **argv)
 	}
 	
 	if (range		<= 0)
-	{
+{
 		fprintf (stderr, "ERROR: Non-existant range; must be > 0\n");
 		exit (2);
 	}
