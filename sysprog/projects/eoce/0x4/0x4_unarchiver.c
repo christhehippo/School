@@ -3,6 +3,7 @@
 //  program to undo the archiving done in
 //	0x4_archiver
 
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -17,21 +18,40 @@ int main (int argc, char **argv)
 	
 	FILE* df;
 	FILE* sf   = fopen(argv[1], "r");
-	char fn[128]; //  = malloc(128*sizeof(char));
+	char buf[128]; // contents from sf 
+	char fn[128];  // file name
 	char    c;
-	int index;
+	int index = 0;
 
-	while (1)
+	while (1)  // continue until nothing in file sf
 	{
-		while ((c = fgetc(sf)) != '~')	
-		{	
+		while (1) // get the file name
+		{
+			c = fgetc(sf);
+			if (c == ':')
+				break;
 			fn[index] = c;
 			index++;
-//			fputc(c, df); 
 		}
-//		break;
+		df = fopen(fn, "w"); //  create the file
+		index = 0;
+		while (1) //  fill the file
+		{
+			c= fgetc(sf);
+			if (c == EOF)
+				break;
+			if (c == '~')
+				break;
+			buf[index] = c;
+			index++;
+		}
+		index = 0;
+		fputs(buf, df);
+		fclose(df);
+		if (c == EOF)	// end 
+			break;
 	}
-	fprintf(stdout, "%s\n", fn);
+//	fprintf(stdout, "%s\n", fn);
 	fclose(sf);
 	return (0);
 }
