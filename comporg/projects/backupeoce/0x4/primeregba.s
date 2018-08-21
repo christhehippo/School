@@ -60,8 +60,7 @@ _start:
 	mov  r12, r1	// free up r1 for syscalls
 	mov  r2, #2		// value that will be tested
 	mov  r3, #2		// divisor for second loop
-	mov  r4, #0     // r4 will be used to store prime flag
-	                // if r4 == 1, number is not prime
+	mov  r4, #2		// store the approx sqrt here
 	mov  r5, r2     // r5 is a backup of test number
 	mov  r6, #1     // r6 holds 1 used to inc numbers
 	mov  r8, #1     // r8 holds the count of prime numbers
@@ -84,15 +83,18 @@ _start:
 	mov  r7, #0x4e
 	swi  0 
 
-.primecheck:
-	cmp  r4, r6		// stop and see if we need to print the number before
-	beq .print		//  upping it
-	mov  r4, #1
 
-.reset:
+.reset: 
 	add  r5, r6		// up the test number
 	mov  r2, r5		// replace the test value
 	mov  r3, #2		// reset the divisor
+	mov  r11, r4
+	add  r11, r6
+	mov  r11, r10
+	mul  r11, r10
+	cmp  r11, r2
+	blt .divide
+	add  r4, r6
 
 .divide:
 	sdiv r2, r3     // divide test number by divisor
@@ -101,16 +103,12 @@ _start:
 	beq .notprime
 	mov  r2, r5		// replace the test value
 	add  r3, r6     // inc the divisor
-	cmp  r3, r2
-	beq .primecheck	// if we reached the limit, reset
+	cmp  r3, r4
+	bge .print	    // if we reached the limit, reset
 	b   .divide		// if not, go back to .dive
 .notprime:
-	mov  r4, #0
 	mov  r2, r5		// replace the test value
-	add  r3, r6		// inc the divisor
-	cmp  r3, r2
-	beq .primecheck	// check if we done
-	b   .divide		// if not, keep dividing
+	b   .reset		// if not, keep dividing
 		
 .print:
 	mov  r11, r5	// store ascii char here
