@@ -1,0 +1,12 @@
+decode.c: In function ‘main’:
+decode.c:101:40: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘long int’ [-Wformat=]
+  fprintf(stdout, "         wrote out: %d\n", bytesOut);
+                                       ~^     ~~~~~~~~
+                                       %ld
+decode.c:103:44: warning: unknown conversion type character ‘\x0a’ in format [-Wformat=]
+  fprintf(stdout, "    inflation rate: %.2f%\n", iRate);
+                                            ^~
+encode.c: In function ‘main’:
+encode.c:145:45: warning: unknown conversion type character ‘\x0a’ in format [-Wformat=]
+   fprintf(stdout, "  compression rate: %.2f%\n", compressionRate);
+                                             ^~

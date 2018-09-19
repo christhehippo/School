@@ -1,0 +1,1 @@
+../pnc0/primeregbo.c
