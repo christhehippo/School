@@ -10,7 +10,7 @@
 ##
 ## Declare variables
 ##
-RELEASE="20171018-0812"
+RELEASE="20180925-1029"
 DESIG="discrete"
 PROJECT="bdt1"
 SEMESTER=$(cat /usr/local/etc/semester)
@@ -81,11 +81,11 @@ for file in audio data filename sample; do
 	printf -- "----[ %11s ]${LINE2}\n" "${file}"
 
 	DATAFILE=${DATADIR}/${file}
-	CCNT=$(./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.* | wc -c)
+	CCNT=$(./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.* | sed 's/\x1b\[[0-9][0-9]m//g' | sed 's/\x1b\[0m//g' | wc -c)
 	cCNT=$(cat ${PROJECTDIR}/.OUT${count} | wc -c)
-	LCNT=$(./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.* | wc -l)
+	LCNT=$(./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.* | sed 's/\x1b\[[0-9][0-9]m//g' | sed 's/\x1b\[0m//g' | wc -l)
 	lCNT=$(cat ${PROJECTDIR}/.OUT${count} | wc -l)
-	MD5S=$(./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.* | md5sum    | cut -d' ' -f1)
+	MD5S=$(./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.* | sed 's/\x1b\[[0-9][0-9]m//g' | sed 's/\x1b\[0m//g' | md5sum | cut -d' ' -f1)
 	mD5S=$(cat ${PROJECTDIR}/.OUT${count} | md5sum    | cut -d' ' -f1)
 	./${PROJECT} ${DATAFILE}1.* ${DATAFILE}2.*
 	echo   "chars:${CCNT}"                             >> ${PFILE}
