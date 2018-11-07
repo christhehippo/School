@@ -40,4 +40,4 @@ else
 endif
 
 clean:
-	@rm -f .*.sw[op] *.save* *~ core ../../errors
+	@rm -f .*.sw[op] *.save* *~ *.o $(OBJ) core ../../errors
