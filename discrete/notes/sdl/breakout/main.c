@@ -12,11 +12,13 @@ int main()
 
 	int JOYSTICK_DEAD_ZONE = 8000;
 
-	SDL_Joystick *js	 = NULL;
-	short int 	  value  = 0;
-	Uint8		  button = 0;
+	SDL_Joystick *js       = NULL;
+	short int value   	   = 0;
+	Uint8 button      	   = 0;
+	Uint8 mousestat		   = 0;
+	int	  mx			   = 0;
+	int   my			   = 0;
 
-	int level  			 = 2;
 	int width            = 1024;  // width (in pixels)
 	int height           = 640;   // height
 	int bpp              = 32;    // bits per pixel (color depth)
@@ -42,22 +44,22 @@ int main()
 	{
 		exit (2);
 	}
-	
+
 	// Check for joysticks
 	if (SDL_NumJoysticks() < 1)
 	{
-		fprintf(stdout, "WARNING: No joysticks connected\n");
+		fprintf (stdout, "WARNING: No joysticks connected\n");
+	//	exit (3);
 	}
 	else
 	{
 		js = SDL_JoystickOpen(0);
 		if (js == NULL)
 		{
-			fprintf(stderr, "WARNING: Unable to open controller! SDL Error: %s\n", SDL_GetError());
-			exit(4);
+			fprintf (stderr, "WARNING: Unable to open controller! SDL Error: %s\n", SDL_GetError());
+	//		exit (4);
 		}
 	}
-
 
 	// initialize paddle resources
 	paddle             = (Player *) malloc (sizeof (Player));
@@ -100,59 +102,30 @@ int main()
 
 	tmp                = bricks;
 	index              = bricks -> pos.x;
-	if (level == 1)
-	{
-		for (row = 0; row < 8; row++)
-		{
-			while (index + tmp -> pos.w < width)
-			{
-				tmp -> next    = (Block *) malloc (sizeof (Block));
-				tmp            = tmp -> next;
-				tmp -> next    = NULL;
-				tmp -> sprite  = load_image ("images/block.png");
-				tmp -> pos.x   = index;
-			//			tmp -> pos.y   = 0;
-				tmp -> pos.y   = row * (tmp -> sprite -> h + 1);
-				tmp -> pos.w   = tmp -> sprite -> w;
-				tmp -> pos.h   = tmp -> sprite -> h;
-				tmp -> visible = TRUE;
-				SDL_FillRect (tmp -> sprite, NULL, SDL_MapRGB (tmp -> sprite -> format, R, G, B));
-				R              = (R + 24) % 255;
-				G              = (G + 8)  % 255;
-				B              = (B + 32) % 255;
-
-				index = index + tmp -> sprite -> w + 1;
-			}
-			index              = 0;
-		}
-	}
-	else if (level == 2)
+	for (row = 0; row < 8; row++)
 	{
 		while (index + tmp -> pos.w < width)
 		{
-			tmp -> next    = (Block *)malloc(sizeof(Block));
-			tmp			   = tmp -> next;
-			tmp -> next	   = NULL;
-			tmp -> sprite  = load_image("images/block.png");
-			if (tmp -> pos.y < height / 2)
-			{
-				tmp -> pos.y = tmp -> pos.y + tmp -> pos.h;
-			}
-			else
-			{
-				tmp -> pos.y = tmp -> pos.y - tmp -> pos.h;
-			}
-			tmp -> pos.x = tmp -> pos.x + tmp -> pos.w;
-			tmp -> pos.w  = tmp -> sprite -> w;
-			tmp -> pos.h  = tmp -> sprite -> h;
+			tmp -> next    = (Block *) malloc (sizeof (Block));
+			tmp            = tmp -> next;
+			tmp -> next    = NULL;
+			tmp -> sprite  = load_image ("images/block.png");
+			tmp -> pos.x   = index;
+//			tmp -> pos.y   = 0;
+			tmp -> pos.y   = row * (tmp -> sprite -> h + 1);
+			tmp -> pos.w   = tmp -> sprite -> w;
+			tmp -> pos.h   = tmp -> sprite -> h;
 			tmp -> visible = TRUE;
 			SDL_FillRect (tmp -> sprite, NULL, SDL_MapRGB (tmp -> sprite -> format, R, G, B));
 			R              = (R + 24) % 255;
 			G              = (G + 8)  % 255;
 			B              = (B + 32) % 255;
+
 			index = index + tmp -> sprite -> w + 1;
 		}
+		index              = 0;
 	}
+	
 
 	SDL_WM_SetCaption ("Breakout 3000XL", NULL);
 
@@ -178,7 +151,7 @@ int main()
 		}
 
 		if (cleared == TRUE)
-			quit == 1;
+			quit = 1;
 
 		if (SDL_Flip (screen) == -1)
 			exit (3);
@@ -195,22 +168,27 @@ int main()
 		if ((keystates[SDLK_RIGHT]) && (paddle -> pos.x + paddle -> pos.w + paddle -> xvel < width))
 			paddle -> pos.x = paddle -> pos.x + paddle -> xvel;
 
+		mousestat	= SDL_GetMouseState(&mx, &my);
+    	paddle -> pos.x = mx;
+		if ((mousestat & SDL_BUTTON(1)) == SDL_BUTTON(1))
+			paddle -> pos.y = paddle -> pos.y - 5;
+		if ((mousestat & SDL_BUTTON(3)) == SDL_BUTTON(3))
+			paddle -> pos.y = paddle -> pos.y + 5;
+		
+		// https://www.libsdl.org/release/SDL-1.2.15/docs/html/joystick.html
 		SDL_JoystickUpdate();
-		value = SDL_JoystickGetAxis(js, 1);
+		value = SDL_JoystickGetAxis(js, 0);
 		if (value < -JOYSTICK_DEAD_ZONE)
 			paddle -> pos.x = paddle -> pos.x - paddle -> xvel;
 		else if (value > JOYSTICK_DEAD_ZONE)
 			paddle -> pos.x = paddle -> pos.x + paddle -> xvel;
 
 		button = SDL_JoystickGetButton(js, 0);
-		if (button == 1)
+		if (button == 1) // 1 means pressed, 0 means not pressed
 		{
 			if (ball -> move == FALSE)
 				ball -> move =  TRUE;
-			else
-				paddle -> pos.x = ball -> pos.x - (paddle -> pos.w / 2);
-	}
-
+		}
 
 		if (keystates[SDLK_SPACE])
 		{
@@ -331,22 +309,42 @@ int main()
 						break;
 				}
 			}
+			/*
+			else if (event.type == SDL_MOUSEMOTION)
+			{
+				paddle -> pos.x  = event.motion.x;
+			}
+			else if (event.type == SDL_MOUSEBUTTONDOWN)
+			{
+				if (event.button.button == SDL_BUTTON_LEFT)
+				{
+					paddle -> pos.y = paddle -> pos.y - 5;
+				}
+
+				if (event.button.button == SDL_BUTTON_RIGHT)
+				{
+					paddle -> pos.y = paddle -> pos.y + 5;
+				}
+			}
 			else if (event.type == SDL_QUIT)
 			{
 				quit = 1;
 			}
-	/*		else if (event.type == SDL_JOYAXISMOTION)
+			
+			else if (event.type == SDL_JOYAXISMOTION)
 			{
-				// motion on controller
+				// motion on controller #0
 				if (event.jaxis.which == 0)
 				{
-					if (event.jaxis.axis == 1)
+					// x axis motion (axis 0 is "x", axis 1 is "y")
+					if (event.jaxis.axis == 0)
 					{
 						// left of dead zone
 						if (event.jaxis.value < -JOYSTICK_DEAD_ZONE)
 						{
 							paddle -> pos.x = paddle -> pos.x - paddle -> xvel;
 						}
+						// right of dead zone
 						else if (event.jaxis.value > JOYSTICK_DEAD_ZONE)
 						{
 							paddle -> pos.x = paddle -> pos.x + paddle -> xvel;
@@ -361,8 +359,9 @@ int main()
 	SDL_FreeSurface (ball -> sprite);
 	SDL_FreeSurface (bg);
 
-	SDL_JoystickClose(js);
+	SDL_JoystickClose (js);
 	js = NULL;
+
 	SDL_Quit ();
 
 	return (0);
