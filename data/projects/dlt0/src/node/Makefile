@@ -1,7 +1,5 @@
-DESIG = data
-SEMESTER = $(shell cat /usr/local/etc/semester)
-PROJ = $(shell /bin/pwd | /bin/grep -o '[sd]l[nlsqt][0-9]' | /usr/bin/sort -u)
-CFLAGS = -fPIC -Wall --std=gnu99
+PROJ = $(shell /bin/pwd | /bin/grep -o '[sd]l[nlsqhtg][0-9]' | /usr/bin/sort -u)
+CFLAGS = -fPIC -Wall
 INC = -I ../../inc
 AR = ar
 CC = gcc
@@ -40,4 +38,4 @@ else
 endif
 
 clean:
-	@rm -f .*.sw[op] *.save* *~ *.o $(OBJ) core ../../errors
+	@rm -f .*.sw[op] *.save* *~ core ../../errors

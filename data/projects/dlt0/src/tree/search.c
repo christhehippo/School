@@ -27,6 +27,46 @@
 //
 code_t searchtree(Tree *myTree, Node **match, sc searchVal)
 {
-	// your implementation here (please remove this comment when done)
-	return(DLT_DEFAULT_FAIL);
+	code_t code = 0;
+	Node  *tmp  = NULL;
+
+	if (myTree == NULL)
+	{
+		code = DLT_ERROR | DLT_NULL;
+	}
+	else if (myTree -> root == NULL)
+	{
+		code = DLT_ERROR | DLT_EMPTY;
+	}
+	else
+	{
+		if (*match == NULL)
+			tmp  = myTree -> root;
+		else
+		{
+			tmp = *match;
+			if (tmp -> VALUE == searchVal)
+				tmp = tmp -> left;
+		}
+	
+
+		while (tmp != NULL)
+		{
+			if (searchVal < tmp -> VALUE)
+				tmp = tmp -> left;
+			else if (searchVal > tmp -> VALUE)
+				tmp = tmp -> right;
+			else if (searchVal == tmp -> VALUE)
+			{
+				*match = tmp;
+				break;
+			}
+		}
+		if (tmp == NULL)
+			code = DLT_EMPTY;
+		else
+			code = DLT_SUCCESS;
+	}
+
+	return(code);
 }

@@ -19,6 +19,44 @@
 //
 code_t rmtree(Tree **curTree)
 {
-	// to be implemented (remove this comment upon completion)
-	return (DLT_DEFAULT_FAIL);
+	code_t code 	= 0;
+	Node  *tmp  	= NULL;
+	Node  *tmp2     = NULL;
+	List  *result   = NULL;
+
+	if (curTree == NULL)
+	{
+		code = DLT_ERROR;
+	}
+	else if (*curTree == NULL)
+	{
+		code = DLT_ERROR | DLT_NULL;	
+	}
+	else if ((*curTree) -> root == NULL)
+	{
+		free(*curTree);
+		*curTree = NULL;
+		code = DLT_NULL | DLT_SUCCESS;
+	}
+	else
+	{
+		traverse_r(*curTree, &result, 0);
+		tmp = result -> lead -> right;
+		while (tmp != NULL)
+		{
+			tmp2 = NULL;
+			searchtree(*curTree, &tmp2, tmp -> VALUE);
+			grabnode(curTree, &tmp2);
+			rmnode(&tmp2);
+			tmp = tmp -> right;
+		}
+		tmp2 = (*curTree) -> root;
+		(*curTree) -> root = NULL;
+		free(tmp2);
+		*curTree = NULL;
+
+		code = DLT_SUCCESS | DLT_NULL;
+	}
+
+	return(code);
 }

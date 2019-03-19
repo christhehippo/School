@@ -1,0 +1,5 @@
+copy.cc: In member function ‘virtual List* ListOfDoublyLinkedNodes::copy()’:
+copy.cc:7:16: error: expected type-specifier before ‘ListofDoublyLinkedNodes’
+  newList = new ListofDoublyLinkedNodes();
+                ^~~~~~~~~~~~~~~~~~~~~~~
+ar: copy.o: No such file or directory
