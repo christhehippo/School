@@ -1,7 +1,7 @@
 ///////////////////////////////////////////
-// Christian Cattell === TSP Project
+// Christian Cattell === TSP Project v2
 //
-//
+// run with ./v2tsp [file] [number of cities]
 //
 
 #include <stdio.h>
@@ -11,7 +11,8 @@
 void timeSum(int *bestComb, int *curComb, int *bestSum, int numCities, int city[numCities][numCities]);
 void permute(int *curComb, int numCities);
 void swap(int *a1, int *a2);
-void reverse(int *curComb, int marker, int numCities);
+void reverse (int *curComb, int marker, int numCities);
+void insertionSort(int marker, int numCities, int *curComb);
 
 
 int main(int argc, char **argv)
@@ -107,6 +108,11 @@ void timeSum(int *bestComb, int *curComb, int *bestSum, int numCities, int city[
 	for (i  = 0; i < numCities - 1; i++)
 	{
 		sum = sum + city[curComb[i]][curComb[i+1]];
+		if (sum > *bestSum)
+		{
+			insertionSort(i+1, numCities, curComb);
+			break;
+		}
 	}
 	sum = sum + city[curComb[numCities-1]][curComb[0]];
 //	for (i = 0; i < numCities; i++)
@@ -166,3 +172,23 @@ void reverse(int *curComb, int marker, int numCities)
 		curComb[numCities - (i - marker)] = tmp;
 	}
 }
+
+void insertionSort(int marker, int numCities, int *curComb)
+{
+	int i 	= 0;
+	int j 	= 0;
+	int tmp = 0;
+	for (i = marker + 1; i < numCities; i++) 
+	{
+		for (j = marker; j < i; j++)
+		{
+			if (curComb[j] < curComb[i])
+			{
+				tmp 	   = curComb[i];
+				curComb[i] = curComb[j];
+				curComb[j] = tmp;
+			}
+		}
+	}
+}
+
