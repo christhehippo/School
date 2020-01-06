@@ -1,0 +1,1 @@
+CSCS 1200 was an intro to CS concepts, the things here are very basic.
